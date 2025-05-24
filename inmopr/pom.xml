@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.tfm</groupId>
+	<artifactId>inmopr</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<name>inmopr</name>
+	<description>Demo project for Spring Boot</description>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.1.5</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<properties>
+		<!--  Data source properties -->
+		<dataSource.user>tfm</dataSource.user>
+		<dataSource.password>tfm</dataSource.password>
+		<testDataSource.user>${dataSource.user}</testDataSource.user>
+		<testDataSource.password>${dataSource.password}</testDataSource.password>
+
+		<!--  Compiler options -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>17</java.version>
+
+		<!-- Package versions -->
+		<jjwt.version>0.9.1</jjwt.version>
+
+		<!-- Plugin versions -->
+		<sqlPlugin.version>1.5</sqlPlugin.version>
+
+	</properties>
+
+	<profiles>
+		<profile>
+			<id>mysql</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<!-- JDBC driver properties -->
+				<jdbcDriver.groupId>mysql</jdbcDriver.groupId>
+				<jdbcDriver.artifactId>mysql-connector-java</jdbcDriver.artifactId>
+				<jdbcDriver.version>8.0.20</jdbcDriver.version>
+				<jdbcDriver.className>com.mysql.cj.jdbc.Driver</jdbcDriver.className>
+
+				<!--  Data source properties -->
+				<dataSource.baseUrl>jdbc:mysql://localhost/inmopr</dataSource.baseUrl>
+				<dataSource.url>${dataSource.baseUrl}?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=Europe/Madrid</dataSource.url>
+				<testDataSource.url>${dataSource.baseUrl}test?useSSL=false&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=Europe/Madrid</testDataSource.url>
+				<dataSource.createTablesScript>1-MySQLCreateTables.sql</dataSource.createTablesScript>
+				<dataSource.createDataScript>2-MySQLCreateData.sql</dataSource.createDataScript>
+
+				<!--  Compiler options -->
+				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+				<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+				<java.version>17</java.version>
+				<maven.compiler.source>17</maven.compiler.source>
+				<maven.compiler.target>17</maven.compiler.target>
+				<maven.compiler.release>17</maven.compiler.release>
+			</properties>
+		</profile>
+	</profiles>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${jdbcDriver.groupId}</groupId>
+			<artifactId>${jdbcDriver.artifactId}</artifactId>
+			<version>${jdbcDriver.version}</version> <!-- Versión agregada aquí -->
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>${jjwt.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.11.0</version>
+					<configuration>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>sql-maven-plugin</artifactId>
+				<version>${sqlPlugin.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>${jdbcDriver.groupId}</groupId>
+						<artifactId>${jdbcDriver.artifactId}</artifactId>
+						<version>${jdbcDriver.version}</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<driver>${jdbcDriver.className}</driver>
+					<url>${dataSource.url}</url>
+					<username>${dataSource.user}</username>
+					<password>${dataSource.password}</password>
+					<autocommit>true</autocommit>
+					<onError>continue</onError>
+					<orderFile>ascending</orderFile>
+					<fileset>
+						<basedir>${basedir}</basedir>
+						<includes>
+							<include>
+								src/sql/${dataSource.createTablesScript}
+							</include>
+							<include>
+								src/sql/${dataSource.createDataScript}
+							</include>
+						</includes>
+					</fileset>
+				</configuration>
+				<executions>
+					<execution>
+						<id>create-tables-for-testing</id>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+						<configuration>
+							<driver>${jdbcDriver.className}</driver>
+							<url>${testDataSource.url}</url>
+							<username>${testDataSource.user}</username>
+							<password>${testDataSource.password}</password>
+							<autocommit>true</autocommit>
+							<onError>continue</onError>
+							<fileset>
+								<basedir>${basedir}</basedir>
+								<includes>
+									<include>
+										src/sql/${dataSource.createTablesScript}
+									</include>
+								</includes>
+							</fileset>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

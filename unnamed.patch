@@ -1,0 +1,223 @@
+Index: src/modules/app/components/Header.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/modules/app/components/Header.css b/src/modules/app/components/Header.css
+--- a/src/modules/app/components/Header.css	
++++ b/src/modules/app/components/Header.css	(date 1745105147748)
+@@ -1,15 +1,15 @@
+ /* General */
+ .header {
+-    background-color: transparent; /* Fondo limpio y minimalista */
+-    padding: 10px 0; /* Reducir el padding superior e inferior */
++    position: fixed !important; /* Mantiene el header fijo si es necesario */
++    top: 0 !important;
++    width: 100%;
+     height: 60px; /* Reducir la altura */
++    background-color: white; /* Fondo limpio y minimalista */
++    padding: 10px 0px; /* Reducir el padding superior e inferior */
+     display: flex;
+     justify-content: center;
+     align-items: center;
+-    position: fixed; /* Mantiene el header fijo si es necesario */
+-    width: 100%;
+-    top: 0;
+-    z-index: 100;
++    z-index: 9999;
+     margin-bottom: 0;
+ 
+ }
+@@ -19,6 +19,14 @@
+     text-decoration: none; /* Eliminar subrayado */
+ }
+ 
++.header-content {
++    display: flex;
++    justify-content: space-between;
++    align-items: center;
++    height: 100%;
++    padding: 0 20px;
++}
++
+ .container {
+     display: flex;
+     align-items: center;
+Index: src/modules/posts/components/PublishPost.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/modules/posts/components/PublishPost.js b/src/modules/posts/components/PublishPost.js
+--- a/src/modules/posts/components/PublishPost.js	
++++ b/src/modules/posts/components/PublishPost.js	(date 1745103671961)
+@@ -182,7 +182,7 @@
+                 <Errors errors={backendErrors} onClose={() => setBackendErrors(null)}/>
+                 <form>
+                     <label>
+-                        <input type="radio" name="tipoAnuncio" value="comprar" checked={tipoAnuncio === 'vender'} onChange={handleTipoAnuncioChange}/>
++                        <input type="radio" name="tipoAnuncio" value="vender" checked={tipoAnuncio === 'vender'} onChange={handleTipoAnuncioChange}/>
+                         {intl.formatMessage({id: "project.publish.post.list"})}
+                     </label>
+                     <label>
+Index: src/modules/posts/components/PublishPost.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/modules/posts/components/PublishPost.css b/src/modules/posts/components/PublishPost.css
+--- a/src/modules/posts/components/PublishPost.css	
++++ b/src/modules/posts/components/PublishPost.css	(date 1745104755240)
+@@ -1,3 +1,8 @@
++/* Añade esto al inicio de tu CSS */
++:root {
++    --header-height: 60px; /* Define la altura del header */
++}
++
+ body {
+     font-family: 'Merriweather', serif;
+     margin: 0;
+@@ -9,11 +14,11 @@
+ .publish-page {
+     display: flex;
+     justify-content: center;
+-    align-items: center;
+-    height: 100vh;
+-    background-color: #f2f2f2;
+-    padding: 0px;
++    align-items: flex-start; /* Cambia de 'center' a 'flex-start' */
++    min-height: calc(100vh - var(--header-height));
++    padding: 140px; /* Ajusta según necesites */
+     margin: 0;
++    box-sizing: border-box;
+ }
+ 
+ /* Formularios */
+@@ -25,12 +30,12 @@
+ 
+ /* Tarjeta de login */
+ .publish-card {
++    width: 100%;
++    max-width: 400px;
+     background-color: #ffffff;
+     border-radius: 8px;
+     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+     padding: 30px;
+-    width: 100%;
+-    max-width: 400px;
+     text-align: center;
+ }
+ 
+@@ -127,7 +132,7 @@
+ }
+ 
+ .input-field {
+-    width: 422px; /* Ajusta el ancho deseado */
++    width: 100%; /* Ajusta el ancho deseado */
+     padding: 8px; /* Ajusta el padding deseado */
+     border: 1px solid #ccc; /* Ajusta el borde deseado */
+     border-radius: 4px; /* Ajusta el radio del borde deseado */
+@@ -150,7 +155,6 @@
+     border: 1px solid #ccc;
+     max-height: 150px;
+     overflow-y: auto;
+-    z-index: 1000;
+     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+     padding-left: 0;
+     margin: 0;
+@@ -167,4 +171,16 @@
+ 
+ .suggestions-dropdown li:hover {
+     background: #f0f0f0;
+-}
+\ No newline at end of file
++}
++
++@media (max-width: 768px) {
++    .publish-page {
++        padding: calc(60px + 10px) 10px 10px;
++    }
++
++    .publish-card {
++        margin-top: 10px;
++        padding: 20px;
++    }
++}
++
+Index: src/modules/users/components/Login.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/modules/users/components/Login.css b/src/modules/users/components/Login.css
+--- a/src/modules/users/components/Login.css	
++++ b/src/modules/users/components/Login.css	(date 1745094260919)
+@@ -5,6 +5,12 @@
+     background-color: #f2f2f2; /* Gris claro de fondo global */
+ }
+ 
++body, html {
++    height: 100%;
++    width: 100%;
++    overflow-x: hidden;
++}
++
+ /* Fondo gris de la página */
+ .login-page {
+     display: flex;
+@@ -13,7 +19,7 @@
+     height: 100vh;
+     background-color: #f2f2f2; /* Gris claro */
+     padding: 20px;
+-    margin: 0;
++    box-sizing: border-box;
+ }
+ 
+ /* Tarjeta de login */
+@@ -25,6 +31,7 @@
+     width: 100%;
+     max-width: 400px;
+     text-align: center;
++    box-sizing: border-box;
+ }
+ 
+ /* Título */
+@@ -99,3 +106,37 @@
+     margin: 15px 0;
+     text-transform: uppercase;
+ }
++
++/* Responsive design para pantallas pequeñas */
++@media screen and (max-width: 480px) {
++    .login-card {
++        padding: 20px 15px;
++    }
++
++    .login-title {
++        font-size: 1.4rem;
++        margin-bottom: 30px;
++    }
++
++    .form-group input {
++        font-size: 0.95rem;
++        padding: 8px;
++    }
++
++    .login-button,
++    .register-button {
++        font-size: 0.95rem;
++        padding: 10px;
++    }
++
++    .separator {
++        margin: 10px 0;
++    }
++}
++
++@media (max-height: 600px) {
++    .login-page {
++        align-items: flex-start;
++        padding-top: 40px;
++    }
++}
+\ No newline at end of file
