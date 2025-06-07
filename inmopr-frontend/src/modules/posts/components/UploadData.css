@@ -1,0 +1,80 @@
+.textarea {
+    width: 300px;
+    padding: 30px;
+}
+
+.input-field-price {
+    text-align: center;
+    width: 380px; /* Ajusta el ancho deseado */
+    padding: 8px; /* Ajusta el padding deseado */
+    border: 1px solid #ccc; /* Ajusta el borde deseado */
+    border-radius: 4px; /* Ajusta el radio del borde deseado */
+    font-size: 1rem; /* Ajusta el tamaño de la fuente deseado */
+}
+
+.input-field {
+    font-family: 'Merriweather', serif;
+    max-width: 380px;
+}
+
+.publish-page {
+    display: flex;
+    justify-content: center;
+    /*align-items: center;
+    height: 100vh;
+    background-color: #f2f2f2;
+    padding: 40px;*/
+    margin: 0px 0px 0px 0px;
+    overflow: hidden;
+}
+
+.custom-success {
+    background-color: #d4edda; /* Verde suave (mejor que rojo para mensajes de éxito) */
+    color: #155724; /* Texto verde oscuro para mejor contraste */
+    padding: 15px 20px;
+    border-radius: 8px;
+    position: absolute; /* Posicionamiento absoluto */
+    top: 50%; /* Centrado vertical */
+    left: 50%; /* Centrado horizontal */
+    transform: translate(-50%, -50%); /* Ajuste fino del centrado */
+    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para mejor visibilidad */
+    text-align: center; /* Texto centrado */
+    width: 80%; /* Ancho adecuado */
+    max-width: 400px; /* Ancho máximo */
+    animation: fadeIn 0.3s ease-in-out;
+    border: 1px solid #c3e6cb; /* Borde sutil */
+}
+
+/* Animación de fadeIn */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Contenedor del formulario necesita posición relativa */
+.publish-card {
+    position: relative;
+}
+
+/* Cuando hay éxito, deshabilitar el formulario */
+.form-disabled {
+    position: relative;
+}
+
+.form-disabled::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.form-disabled .input-field,
+.form-disabled .continue-button {
+    opacity: 0.6;
+    pointer-events: none;
+}

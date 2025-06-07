@@ -1,0 +1,101 @@
+body {
+    font-family: 'Merriweather', serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f2f2f2; /* Gris claro de fondo global */
+}
+
+/* Fondo gris de la página */
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f2f2f2; /* Gris claro */
+    padding: 20px;
+    margin: 0;
+}
+
+/* Tarjeta de login */
+.login-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Título */
+.login-title {
+    font-family: 'Merriweather', serif;
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 50px;
+    color: #333333;
+}
+
+/* Formularios */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Espacio entre los campos */
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    color: #666666;
+    margin-bottom: 5px;
+    text-align: left;
+    display: block;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+/* Botones */
+.login-button,
+.register-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.login-button {
+    background-color: rgba(0, 123, 255, 0.7); /* Azul */
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.login-button:hover {
+    background-color: #0056b3; /* Azul oscuro */
+}
+
+.register-button {
+    background-color: rgba(40, 167, 69, 0.74); /* Verde */
+    color: #ffffff;
+}
+
+.register-button:hover {
+    background-color: #218838; /* Verde oscuro */
+}
+
+/* Separador */
+.separator {
+    font-size: 0.9rem;
+    color: #999999;
+    margin: 15px 0;
+    text-transform: uppercase;
+}

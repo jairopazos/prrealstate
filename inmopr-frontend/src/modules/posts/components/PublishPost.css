@@ -1,0 +1,230 @@
+body {
+    font-family: 'Merriweather', serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f2f2f2;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+/* Fondo gris de la página */
+.publish-page {
+    display: flex;
+    justify-content: center;
+    /*align-items: center;
+    height: 100vh;
+    background-color: #f2f2f2;
+    padding: 40px;*/
+    margin: 0px 0px 0px 0px;
+    overflow: hidden;
+}
+
+/* Formularios */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+/* Tarjeta de login */
+.publish-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Estilos generales para los campos de formulario */
+.form-group label {
+    font-size: 0.9rem;
+    color: #000000;
+    margin-bottom: 5px;
+    text-align: left;
+    display: block;
+}
+
+.form-group {
+    margin-bottom: 15px; /* Espacio entre cada campo del formulario */
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+/* Estilos para el input de tipo date */
+input[type="date"] {
+    font-family: 'Merriweather', serif;
+    padding: 10px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #666666; /* Color gris por defecto */
+    transition: color 0.3s ease; /* Para transición suave al cambiar el color */
+}
+
+input[type="date"]:not([value=""]) {
+    color: #000000; /* Cambia a negro cuando hay valor */
+}
+
+/* Estilo para el pseudo-elemento de la fecha */
+input[type="date"]::-webkit-datetime-edit {
+    color: #666666; /* Color gris por defecto */
+}
+
+input[type="date"]:not([value=""])::-webkit-datetime-edit {
+    color: #000000; /* Cambia a negro cuando hay un valor */
+}
+
+.login-title {
+    margin: 5px 0; /* Reducir margen superior e inferior */
+    padding: 16px; /* Eliminar padding extra */
+    line-height: 1.2; /* Hacer el texto más compacto */
+}
+
+
+/* Botones */
+.login-button,
+.register-user-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.login-button {
+    background-color: rgba(0, 123, 255, 0.7);
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.login-button:hover {
+    background-color: #0056b3;
+}
+
+.register-user-button {
+    background-color: rgba(40, 167, 69, 0.74);
+    color: #ffffff;
+}
+
+.register-user-button:hover {
+    background-color: #218838;
+}
+
+input[type="radio"] {
+    margin-right: 2px;
+    margin-bottom: 20px;
+}
+
+label {
+    margin-right: 20px;
+}
+
+.input-field {
+    width: 422px; /* Ajusta el ancho deseado */
+    padding: 8px; /* Ajusta el padding deseado */
+    border: 1px solid #ccc; /* Ajusta el borde deseado */
+    border-radius: 4px; /* Ajusta el radio del borde deseado */
+    font-size: 1rem; /* Ajusta el tamaño de la fuente deseado */
+    /* Otros estilos que tenga tu input */
+}
+
+.input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+/* Dropdown de sugerencias */
+.suggestions-dropdown {
+    position: absolute; /* ✅ Esto permite que flote */
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    padding-left: 0;
+    margin: 0;
+    list-style: none;
+}
+
+
+/* Cada opción del dropdown */
+.suggestions-dropdown li {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+}
+
+.suggestions-dropdown li:hover {
+    background: #f0f0f0;
+}
+
+/* Contenedor flex para los campos en la misma línea */
+.form-row {
+    display: flex;
+    gap: 15px; /* Espacio entre los campos */
+    width: 100%;
+}
+
+/* Cada campo ocupa la mitad del espacio disponible */
+.form-group-half {
+    flex: 1; /* Ocupa igual espacio */
+    min-width: 0; /* Evita problemas de overflow */
+}
+
+/* Ajusta el ancho de los inputs dentro de los grupos mitad */
+.form-group-half .input-field {
+    width: 80%;
+}
+
+.continue-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+    background-color: #bfa980;
+    color: white;
+}
+
+.publish-title {
+    color: #bfa980;
+    font-weight: bold;
+    margin-top: 0px;
+    margin-bottom: 20px;
+}
+
+.publish-title-ubication {
+    color: #bfa980;
+    font-weight: bold;
+    margin-top: 40px;
+}
+
+.back-button {
+    margin: 90px 0px 0px 40px;
+    padding: 12px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    background-color: #bfa980;
+    color: white;
+}
