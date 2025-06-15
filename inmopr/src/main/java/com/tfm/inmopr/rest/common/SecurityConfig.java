@@ -43,8 +43,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/listings/new").permitAll()
                         .requestMatchers(HttpMethod.PUT,"/users/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/listings**").permitAll()
                         .anyRequest().denyAll()
-                );
+                ); 
 
         return http.build();
     }
