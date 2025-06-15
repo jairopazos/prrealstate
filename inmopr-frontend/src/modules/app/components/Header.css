@@ -1,0 +1,221 @@
+/* General */
+.header {
+    background-color: white; /* Fondo limpio y minimalista */
+    padding: 10px 0; /* Reducir el padding superior e inferior */
+    height: 60px; /* Reducir la altura */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed; /* Mantiene el header fijo si es necesario */
+    width: 100%;
+    top: 0;
+    z-index: 100;
+    margin-bottom: 0;
+
+}
+
+/* Eliminar el subrayado de todos los enlaces dentro de la cabecera */
+.header a {
+    text-decoration: none; /* Eliminar subrayado */
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Espacios a la izquierda y derecha */
+.nav-left {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.nav-right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end; /* Alinea a la derecha */
+    align-items: center; /* Centra verticalmente */
+    position: absolute;
+    right: 20px; /* Ajusta según necesidad */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
+/* Estilo para el enlace "Mi cuenta" */
+.nav-right .login-link {
+    color: #bfa980;
+    text-decoration: none;  /* Eliminar subrayado */
+    font-size: 1.1rem;
+}
+
+/* Estilo para el enlace "Mi cuenta" */
+.nav-right .publish-link {
+    color: #bfa980;
+    margin-right: 1rem;
+    text-decoration: none;  /* Eliminar subrayado */
+    font-size: 1.1rem;
+}
+
+/* Título principal */
+.title {
+    flex: 0;
+    letter-spacing: 10px;
+    font-family: 'Merriweather', serif;
+    font-size: 2.6rem; /* Tamaño base del título */
+    color: #bfa980;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap; /* Evitar que el título se divida en varias líneas */
+}
+
+/* Estilo para las letras destacadas */
+.title .highlight {
+    color: #e60000; /* Color rojo para las letras destacadas */
+}
+
+/* Menú Hamburguesa */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    height: 21px;
+    justify-content: space-between;
+}
+
+.hamburger .bar {
+    width: 30px;
+    height: 3px;
+    background-color: #fff; /* Color blanco para las barras */
+    transition: 0.3s;
+}
+
+.hamburger.active .bar:nth-child(1) {
+    transform: rotate(45deg);
+    position: relative;
+    top: 7px;
+}
+
+.hamburger.active .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active .bar:nth-child(3) {
+    transform: rotate(-45deg);
+    position: relative;
+    top: -7px;
+}
+
+/* ... (otros estilos) ... */
+
+/* Menú de navegación */
+.menu {
+    display: none;
+    position: absolute;
+    top: 60px; /* Ajusta la posición vertical según la altura del header */
+    right: 0; /* Alinea con el borde izquierdo de la pantalla */
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 15px;
+    width: 300px; /* Ajusta el ancho fijo */
+    max-width: none; /* Elimina el ancho máximo */
+    white-space: normal;
+    word-wrap: break-word;
+    z-index: 1000; /* Asegura que aparezca por encima de otros elementos */
+}
+
+.menu.open {
+    display: block;
+    top: 90%;
+    max-width: 30%;
+}
+
+.menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu li {
+    margin: 10px 0;
+}
+
+.menu li a {
+    color: #bfa980;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+    .login-link {
+        display: none;
+    }
+
+    .publish-link {
+        display: none;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .menu {
+        width: 100%; /* Ocupa todo el ancho en pantallas pequeñas */
+    }
+
+    .title {
+        font-size: 2rem;
+    }
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+    .login-link {
+        text-decoration: none; /* Eliminar subrayado */
+        display: none;
+    }
+
+    .publish-link {
+        text-decoration: none; /* Eliminar subrayado */
+        display: none;
+    }
+
+    .hamburger {
+        display: flex; /* Mostrar menú hamburguesa */
+    }
+
+    .menu {
+        width: 100%; /* Ocupa todo el ancho en pantallas pequeñas */
+    }
+
+    /* Reducir tamaño del título en pantallas pequeñas */
+    .title {
+        font-size: 2rem; /* Reducir tamaño del título */
+    }
+}
+
+@media (max-width: 480px) {
+    /* Reducir aún más el título en pantallas muy pequeñas */
+    .title {
+        font-size: 1.5rem; /* Más pequeño aún */
+    }
+}
+
+.luxury-title {
+    font-family: 'Playfair Display', serif; /* Elegante y sofisticado */
+    font-size: 3rem; /* Tamaño grande para impacto */
+    font-weight: bold; /* Mayor presencia */
+    letter-spacing: 2px; /* Espaciado para un look más premium */
+    text-transform: uppercase; /* Sensación de exclusividad */
+    color: #bfa980; /* Dorado o tonos beige/dorados */
+    text-align: center; /* Centrar el título */
+    margin: 20px 0; /* Espaciado adecuado */
+}

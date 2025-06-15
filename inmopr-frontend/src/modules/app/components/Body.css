@@ -1,0 +1,261 @@
+/* Estilo general para el contenedor del video */
+.body-container {
+    position: relative;
+    width: 100%;
+    height: 100vh; /* Ocupa toda la altura de la pantalla */
+    overflow: hidden; /* Asegura que el contenido no se desborde */
+    margin: 0;
+    padding: 0;
+}
+
+/* Video de fondo */
+.background-video {
+    position: absolute;
+    top: 90px; /* Justo debajo del header */
+    left: 0;
+    width: 100%;
+    height: calc(99vh - 80px); /* Altura completa restando el header */
+    object-fit: cover; /* Asegura que cubra toda la pantalla sin distorsionarse */
+    z-index: -1; /* Poner el video detrás del contenido */
+}
+
+/* Contenido que va sobre el video */
+.content {
+    position: relative; /* Para que el contenido se muestre por encima del video */
+    z-index: 1;
+    padding: 20px;
+}
+
+/* Barra de búsqueda superpuesta */
+.search-bar-overlay {
+    position: absolute;
+    top: 50%; /* Centra verticalmente */
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centra el formulario */
+    display: flex;
+    background: rgba(255, 255, 255, 0.8); /* Fondo blanco translúcido */
+    padding: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Input de la barra */
+.search-bar-overlay input {
+    width: 250px;
+    padding: 10px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+/* Botón de búsqueda */
+.search-bar-overlay button {
+    padding: 10px 15px;
+    border: none;
+    background-color: #bfa980;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.search-bar-overlay button:hover {
+    background-color: #bfa980;
+}
+
+.input-search-city {
+    flex: 1;
+    border: none;
+    padding: 12px 15px;
+    font-size: 16px;
+    outline: none;
+    background: transparent;
+}
+
+/* Contenedor de la barra de búsqueda */
+.search-bar-overlay {
+    position: absolute;
+    top: 45vh; /* Centrada dentro del video */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    width: 400px;
+}
+
+/* Input de búsqueda */
+.search-input {
+    flex: 1;
+    border: none;
+    padding: 12px 15px;
+    font-size: 16px;
+    outline: none;
+    background: transparent;
+}
+
+/* Contenedor de la barra de búsqueda */
+.search-bar-overlay {
+    position: absolute;
+    top: 45vh; /* Centrada dentro del video */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    width: 400px;
+}
+
+/* Input de búsqueda */
+.search-input {
+    flex: 1;
+    border: none;
+    padding: 12px 15px;
+    font-size: 16px;
+    outline: none;
+    background: transparent;
+    border: 1px solid #ccc; /* Agrega un borde sutil */
+}
+
+/* Botón de búsqueda */
+.search-button {
+    padding: 12px 15px;
+    border: none;
+    background-color: #bfa980;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background 0.3s;
+}
+
+.search-button:hover {
+    background-color: #bfa980;
+}
+
+/* Contenedor del buscador */
+.search-container {
+    position: relative;
+    width: 100%;
+}
+
+/* Input de búsqueda */
+.input-search-city {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+/* Dropdown de sugerencias */
+.suggestions-dropdown {
+    position: absolute;
+    top: 100%; /* Se coloca justo debajo del input */
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    max-height: 150px; /* Máximo 3 opciones visibles */
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Cada opción del dropdown */
+.suggestions-dropdown li {
+    padding: 10px;
+    cursor: pointer;
+    list-style: none;
+    transition: background 0.2s;
+    border-bottom: 1px solid #ddd;
+}
+
+.suggestions-dropdown li:hover {
+    background: #f0f0f0;
+}
+
+
+/* Botón de búsqueda */
+.search-bar-overlay button {
+    border: none;
+    background: #bfa980;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.search-bar-overlay button:hover {
+    background: #bfa980;
+}
+
+/* Contenedor de la barra de búsqueda */
+.search-bar-overlay {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    width: 400px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Contenedor del input con sugerencias */
+.search-container {
+    position: relative;
+    width: 100%;
+}
+
+/* Input de búsqueda */
+.input-search-city {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+/* Dropdown de sugerencias */
+.suggestions-dropdown {
+    position: absolute;
+    width: 90%;
+    background: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    max-height: 150px; /* Muestra hasta 3 opciones (aprox 50px por opción) */
+    overflow-y: auto; /* Permite scroll si hay más de 3 opciones */
+    z-index: 1000;
+}
+
+/* Estilo de cada opción en el dropdown */
+.suggestions-dropdown li {
+    padding: 10px;
+    cursor: pointer;
+    list-style: none;
+    transition: background 0.2s;
+    border-bottom: 1px solid #ddd;
+}
+
+.suggestions-dropdown li:hover {
+    background: #f0f0f0;
+}
+
+/* Botón de búsqueda */
+.search-bar-overlay button {
+    border: none;
+    background: #bfa980;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.search-bar-overlay button:hover {
+    background: #bfa980;
+}

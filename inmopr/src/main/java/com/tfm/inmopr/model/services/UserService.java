@@ -1,0 +1,18 @@
+package com.tfm.inmopr.model.services;
+
+import com.tfm.inmopr.model.entities.User;
+import com.tfm.inmopr.model.exceptions.DuplicateInstanceException;
+import com.tfm.inmopr.model.exceptions.IncorrectLoginException;
+import com.tfm.inmopr.model.exceptions.InstanceNotFoundException;
+
+import java.time.LocalDate;
+
+public interface UserService {
+
+    User login(String email, String password) throws IncorrectLoginException;
+
+    void signUp(User user) throws DuplicateInstanceException;
+
+    User updateProfile(Long id, String firstName, String lastName, String email, LocalDate birthDate, String password) throws DuplicateInstanceException, InstanceNotFoundException;
+
+}

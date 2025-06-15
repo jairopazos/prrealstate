@@ -1,0 +1,160 @@
+/* Textarea de descripción */
+.textarea {
+    width: 300px;
+    padding: 30px;
+}
+
+/* Campo de precio */
+.input-field-price {
+    text-align: center;
+    width: 380px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+/* Inputs generales */
+.input-field {
+    font-family: 'Merriweather', serif;
+    max-width: 380px;
+}
+
+/* Página principal de publicación */
+.publish-page-details {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    margin: 0;
+    overflow: hidden;
+}
+
+/* Tarjeta del formulario */
+.publish-card-details {
+    position: relative;
+    width: 100%;
+    max-width: 600px; /* Asegura espacio para columnas */
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+/* Mensaje de éxito */
+.custom-success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 15px 20px;
+    border-radius: 8px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 80%;
+    max-width: 400px;
+    animation: fadeIn 0.3s ease-in-out;
+    border: 1px solid #c3e6cb;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Desactivar formulario al completar */
+.form-disabled {
+    position: relative;
+}
+
+.form-disabled::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.form-disabled .input-field,
+.form-disabled .continue-button {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Grid de características */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Estilo de cada checkbox */
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Formulario de características */
+.features-form {
+    width: 100%;
+}
+
+.publish-page-details .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.estado-row {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 0.2rem;
+    margin-bottom: 2rem;
+}
+
+.estado-row .checkbox-item {
+    white-space: nowrap; /* Evita saltos de línea */
+}
+
+
+
+.input-without-border {
+    border: none;
+    border-bottom: 1px solid #000;
+    outline: none;
+    padding: 5px;
+    font-size: 16px;
+    background-color: transparent;
+    margin-left: 2px;
+    float: right; /* Hace que el input flote a la derecha */
+    text-align: center;
+}
+
+.select-orientacion {
+    border: none;
+    outline: none;
+    padding: 2px;
+    font-size: 16px;
+    background-color: transparent;
+    margin-left: 85px;
+    float: right; /* Hace que el input flote a la derecha */
+    text-align: center;
+}
+
+.input-field-estado {
+    border: none;
+    font-size: 16px;
+}
