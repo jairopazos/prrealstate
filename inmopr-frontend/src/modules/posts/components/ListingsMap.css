@@ -59,3 +59,10 @@
 .gm-control-active div {
     transition: background-position 0.2s ease;
 }
+
+.price-label {
+    background: #2c3e50;
+    padding: 4px 6px;
+    border-radius: 16px;
+    border: 1px solid #fff;
+}

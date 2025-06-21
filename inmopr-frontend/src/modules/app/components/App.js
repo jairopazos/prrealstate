@@ -11,7 +11,8 @@ import UploadContactInformation from "../../posts/components/UploadContactInform
 import UserDetails from "../../users/components/UserDetails";
 import ListingsPage from "../../posts/components/ListingsPage";
 import UploadDataDetails from "../../posts/components/UploadDataDetails";
-import MapExample from "../../posts/components/MapExample";
+import ListingsMap from "../../posts/components/ListingsMap";
+import ListingDetails from "../../posts/components/ListingDetails";
 
 
 const AppContent = () => {
@@ -31,7 +32,8 @@ const AppContent = () => {
                 <Route path="listings/new/uploadData" element={<UploadData />} />
                 <Route path="listings/new/uploadDataDetails" element={<UploadDataDetails />} />
                 <Route path="listings/new/uploadContactInformation" element={<UploadContactInformation />} />
-                <Route path="listings/map" element={<MapExample />} />
+                <Route path="listings/map" element={<ListingsMap />} />
+                <Route path="listing/details" element={<ListingDetails />} />
 
             </Routes>
         </div>

@@ -3,6 +3,7 @@ package com.tfm.inmopr.model.entities;
 import com.tfm.inmopr.model.converters.ListToStringConverter;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.time.LocalDateTime;
 
@@ -34,6 +35,7 @@ public class Post {
     private Boolean calefaccion;
     private Boolean piscina;
     private Estado estado;
+    private BigDecimal precio;
 
     public Post() {}
 
@@ -41,7 +43,7 @@ public class Post {
                 String ownerName, String telephone, LocalDateTime creationDate, LocalDateTime modificationDate, Address address,
                 Boolean ascensor, Boolean garaje, String metrosConstruidos, String metrosUtiles, String numBanos,
                 Boolean exterior, Orientacion orientacion, Boolean amueblado, Boolean trastero, Boolean jardin, Boolean terraza,
-                Boolean calefaccion, Boolean piscina, Estado estado) {
+                Boolean calefaccion, Boolean piscina, Estado estado, BigDecimal precio) {
         this.name = name;
         this.tipoAnuncio = tipoAnuncio;
         this.tipoVivienda = tipoVivienda;
@@ -66,12 +68,13 @@ public class Post {
         this.calefaccion = calefaccion;
         this.piscina = piscina;
         this.estado = estado;
+        this.precio = precio;
     }
 
     public Post(TipoAnuncio tipoAnuncio, TipoVivienda tipoVivienda, String description, List<String> urls, String ownerName,
                 String telephone, Address address, Boolean ascensor, Boolean garaje, String metrosConstruidos, String metrosUtiles, String numBanos,
                 Boolean exterior, Orientacion orientacion, Boolean amueblado, Boolean trastero, Boolean jardin, Boolean terraza,
-                Boolean calefaccion, Boolean piscina, Estado estado) {
+                Boolean calefaccion, Boolean piscina, Estado estado, BigDecimal precio) {
         this.tipoAnuncio = tipoAnuncio;
         this.tipoVivienda = tipoVivienda;
         this.description = description;
@@ -93,6 +96,7 @@ public class Post {
         this.calefaccion = calefaccion;
         this.piscina = piscina;
         this.estado = estado;
+        this.precio = precio;
     }
 
     @Id
@@ -306,6 +310,14 @@ public class Post {
 
     public void setEstado(Estado estado) {
         this.estado = estado;
+    }
+
+    public BigDecimal getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(BigDecimal precio) {
+        this.precio = precio;
     }
 
 }

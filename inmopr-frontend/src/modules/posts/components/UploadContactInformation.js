@@ -50,6 +50,7 @@ const UploadData = ({ onUploadComplete }) => {
                     calefaccion: postData.calefaccion,
                     piscina: postData.piscina,
                     estado: postData.estado,
+                    precio: postData.formattedPrice
                 },
                     () => setSuccessMessage(intl.formatMessage({
                         id: "project.publish.success",

@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux';
 import * as actions from '../actions';
 import './ListingsPage.css';
 import {FormattedMessage} from "react-intl";
+import { useNavigate } from 'react-router-dom';
+import ListingCard from './ListingCard'; // NUEVO
 
 const useQuery = () => new URLSearchParams(useLocation().search);
 
@@ -11,11 +13,12 @@ const ListingsPage = () => {
     const dispatch = useDispatch();
     const query = useQuery();
     const city = query.get('city') || '';
-    const [page, setPage] = useState(0);  // Estado para manejar la paginación
+    const [page, setPage] = useState(0);
     const [listings, setListings] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [totalPages, setTotalPages] = useState(0);  // Estado para el total de páginas
+    const [totalPages, setTotalPages] = useState(0);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     const [filters, setFilters] = useState({
         tipoAnuncio: '',
@@ -47,8 +50,11 @@ const ListingsPage = () => {
         }
     };
 
+    const handleCardClick = (property) => {
+        navigate('/listing/details', { state: { property } });
+    };
+
     useEffect(() => {
-        console.log('City:', city);  // Agrega este log para ver cuando `city` cambia
         if (!city) return;
 
         setLoading(true);
@@ -57,7 +63,7 @@ const ListingsPage = () => {
         dispatch(
             actions.fetchListings(
                 city,
-                0, // página 0
+                0,
                 10,
                 data => {
                     setListings(data.listings || []);
@@ -73,7 +79,6 @@ const ListingsPage = () => {
         );
     }, [city, page]);
 
-    // Función para manejar la paginación
     const handlePageChange = (newPage) => {
         if (newPage >= 0 && newPage < totalPages) {
             setPage(newPage);
@@ -88,7 +93,6 @@ const ListingsPage = () => {
 
             {/* FILTROS */}
             <div className="filters-row">
-
                 <select name="tipoAnuncio" className="filter-field" value={filters.tipoAnuncio} onChange={handleFilterChange}>
                     <option value="">Tipo de anuncio</option>
                     <option value="venta">Venta</option>
@@ -135,71 +139,39 @@ const ListingsPage = () => {
                 </select>
 
                 <div className="suggestions-dropdown">
-                    <label>
-                        <input type="checkbox" name="piscina" checked={filters.comodidades.piscina} onChange={handleFilterChange} />
-                        Piscina
-                    </label>
-                    <label>
-                        <input type="checkbox" name="jardin" checked={filters.comodidades.jardin} onChange={handleFilterChange} />
-                        Jardín
-                    </label>
-                    <label>
-                        <input type="checkbox" name="garaje" checked={filters.comodidades.garaje} onChange={handleFilterChange} />
-                        Garaje
-                    </label>
-                    <label>
-                        <input type="checkbox" name="ascensor" checked={filters.comodidades.ascensor} onChange={handleFilterChange} />
-                        Ascensor
-                    </label>
+                    {['piscina', 'jardin', 'garaje', 'ascensor'].map((amenity) => (
+                        <label key={amenity}>
+                            <input type="checkbox" name={amenity} checked={filters.comodidades[amenity]} onChange={handleFilterChange} />
+                            {amenity.charAt(0).toUpperCase() + amenity.slice(1)}
+                        </label>
+                    ))}
                 </div>
 
-                <button className="filter-field-button" onClick={() => alert("Abrir mapa")}>
-                     Mapa 🗺️
-                </button>
-
-                <button className="filter-field-button" onClick={() => alert("Abrir mapa")}>
+                <button className="filter-field-button" onClick={() => navigate('/listings/map', { state: { listings } })}>
                     Mapa 🗺️
                 </button>
-
             </div>
 
-            {loading && <p>
-                <FormattedMessage id="project.app.listings.loading"/>
-            </p>}
+            {loading && <p><FormattedMessage id="project.app.listings.loading" /></p>}
             {error && <p style={{ color: 'red' }}>{error}</p>}
-
 
             <div className="cards-grid">
                 {listings.map((listing) => (
-                    <div key={listing.id} className="listing-card">
-                        <div className="carousel">
-                            {listing.urls?.map((img, idx) => (
-                                <img key={idx} src={img} alt={`listing-${idx}`} />
-                            ))}
-                        </div>
-                        <h3>{listing.name}</h3>
-                        <p className={"listing-description"} >{listing.description}</p>
-                    </div>
+                    <ListingCard
+                        key={listing.id}
+                        listing={listing}
+                        onClick={handleCardClick}
+                    />
                 ))}
             </div>
 
             {/* Paginación */}
             <div className="pagination">
-                <button
-                    disabled={page === 1}
-                    onClick={() => handlePageChange(page - 1)}>
-                    Anterior
-                </button>
+                <button disabled={page === 1} onClick={() => handlePageChange(page - 1)}>Anterior</button>
                 <span>
-                    <FormattedMessage
-                        id="project.app.listings.listings.page"
-                        values={{ page, totalPages }}
-                    />
+                    <FormattedMessage id="project.app.listings.listings.page" values={{ page, totalPages }} />
                 </span>
-                <button
-                    className={"next-button"}
-                    disabled={page === totalPages}
-                    onClick={() => handlePageChange(page + 1)}>
+                <button className="next-button" disabled={page === totalPages} onClick={() => handlePageChange(page + 1)}>
                     <FormattedMessage id="project.app.listings.next"/>
                 </button>
             </div>

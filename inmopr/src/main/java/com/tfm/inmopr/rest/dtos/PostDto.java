@@ -34,6 +34,7 @@ public class PostDto {
     private Boolean calefaccion;
     private Boolean piscina;
     private Estado estado;
+    private String precio;
 
     public PostDto() {}
 
@@ -41,7 +42,7 @@ public class PostDto {
                    List<String> urls, String ownerName, String telephone, LocalDateTime creationDate, LocalDateTime modificationDate,
                    Address address, Boolean ascensor, Boolean garaje, String metrosConstruidos, String metrosUtiles, String numBanos,
                    Boolean exterior, Orientacion orientacion, Boolean amueblado, Boolean trastero, Boolean jardin, Boolean terraza,
-                   Boolean calefaccion, Boolean piscina, Estado estado) {
+                   Boolean calefaccion, Boolean piscina, Estado estado, String precio) {
         this.id = id;
         this.name = name;
         this.tipoAnuncio = tipoAnuncio;
@@ -67,10 +68,11 @@ public class PostDto {
         this.calefaccion = calefaccion;
         this.piscina = piscina;
         this.estado = estado;
+        this.precio = precio;
     }
 
     public PostDto(Long id, TipoAnuncio tipoAnuncio, TipoVivienda tipoVivienda, String description, List<String> urls,
-                   String ownerName, String telephone, Address address) {
+                   String ownerName, String telephone, Address address, String precio) {
         this.id = id;
         this.tipoAnuncio = tipoAnuncio;
         this.tipoVivienda = tipoVivienda;
@@ -79,6 +81,7 @@ public class PostDto {
         this.ownerName = ownerName;
         this.telephone = telephone;
         this.address = address;
+        this.precio = precio;
     }
 
     public Long getId() {
@@ -299,6 +302,15 @@ public class PostDto {
 
     public void setEstado(Estado estado) {
         this.estado = estado;
+    }
+
+    @NotNull(groups={UserDto.AllValidations.class, UserDto.UpdateValidations.class})
+    public String getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(String precio) {
+        this.precio = precio;
     }
 
 }
