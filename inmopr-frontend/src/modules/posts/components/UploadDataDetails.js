@@ -14,6 +14,7 @@ const UploadDataDetails = () => {
         garaje: false,
         metrosConstruidos: '',
         metrosUtiles: '',
+        numHabitaciones: '',
         numBanos: '',
         exterior: false,
         orientacion: '',
@@ -123,7 +124,19 @@ const UploadDataDetails = () => {
                         </label>
                         <br></br><br></br><br/>
                         <label>
-                            <FormattedMessage id="project.features.numBanos" defaultMessage="Número de baños" />
+                            <FormattedMessage id="project.features.numHabitaciones" defaultMessage="Nº de habitaciones" />
+                            <input
+                                type="number"
+                                className="input-without-border"
+                                name="numHabitaciones"
+                                value={formValues.numHabitaciones}
+                                onChange={handleChange}
+                                required
+                            />
+                        </label>
+                        <br></br><br></br><br/>
+                        <label>
+                            <FormattedMessage id="project.features.numBanos" defaultMessage="Nº de baños" />
                             <input
                                 type="number"
                                 className="input-without-border"
@@ -134,7 +147,6 @@ const UploadDataDetails = () => {
                             />
 
                         </label>
-                        <br></br>
                         <br></br><br /><br/>
                         {/* Selector de orientación */}
                         <label>

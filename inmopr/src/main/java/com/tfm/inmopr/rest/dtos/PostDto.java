@@ -24,6 +24,7 @@ public class PostDto {
     private Boolean garaje;
     private String metrosConstruidos;
     private String metrosUtiles;
+    private String numHabitaciones;
     private String numBanos;
     private Boolean exterior;
     private Orientacion orientacion;
@@ -40,7 +41,7 @@ public class PostDto {
 
     public PostDto(Long id, String name, TipoAnuncio tipoAnuncio, TipoVivienda tipoVivienda, String description,
                    List<String> urls, String ownerName, String telephone, LocalDateTime creationDate, LocalDateTime modificationDate,
-                   Address address, Boolean ascensor, Boolean garaje, String metrosConstruidos, String metrosUtiles, String numBanos,
+                   Address address, Boolean ascensor, Boolean garaje, String metrosConstruidos, String metrosUtiles, String numHabitaciones, String numBanos,
                    Boolean exterior, Orientacion orientacion, Boolean amueblado, Boolean trastero, Boolean jardin, Boolean terraza,
                    Boolean calefaccion, Boolean piscina, Estado estado, String precio) {
         this.id = id;
@@ -58,6 +59,7 @@ public class PostDto {
         this.garaje = garaje;
         this.metrosConstruidos = metrosConstruidos;
         this.metrosUtiles = metrosUtiles;
+        this.numHabitaciones = numHabitaciones;
         this.numBanos = numBanos;
         this.exterior = exterior;
         this.orientacion = orientacion;
@@ -220,6 +222,16 @@ public class PostDto {
 
     public void setMetrosUtiles(String metrosUtiles) {
         this.metrosUtiles = metrosUtiles;
+    }
+
+    @NotNull(groups={UserDto.AllValidations.class, UserDto.UpdateValidations.class})
+    @Size(min=1, max=100, groups={UserDto.AllValidations.class, UserDto.UpdateValidations.class})
+    public String getNumHabitaciones() {
+        return numHabitaciones;
+    }
+
+    public void setNumHabitaciones(String numHabitaciones) {
+        this.numHabitaciones = numHabitaciones;
     }
 
     @NotNull(groups={UserDto.AllValidations.class, UserDto.UpdateValidations.class})

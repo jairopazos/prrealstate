@@ -40,6 +40,7 @@ const UploadData = ({ onUploadComplete }) => {
                     garaje: postData.garaje,
                     metrosConstruidos: postData.metrosConstruidos,
                     metrosUtiles: postData.metrosUtiles,
+                    numHabitaciones: postData.numHabitaciones,
                     numBanos: postData.numBanos,
                     exterior: postData.exterior,
                     orientacion: postData.orientacion,

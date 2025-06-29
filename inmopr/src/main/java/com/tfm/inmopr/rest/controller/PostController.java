@@ -21,6 +21,20 @@ public class PostController {
     @Autowired
     private PostsService postsService;
 
+    private Boolean isFiltersEnabled(PropertyOptionsDto propertyOptionsDto) {
+        if (propertyOptionsDto.getTipoAnuncio() == null && propertyOptionsDto.getTipoVivienda() == null &&
+            propertyOptionsDto.getPrecioMaximo().isEmpty() && propertyOptionsDto.getNumHabitaciones().isEmpty() &&
+            propertyOptionsDto.getNumBanos().isEmpty() && propertyOptionsDto.getMetrosConstruidos().isEmpty() && propertyOptionsDto.
+            getMetrosUtiles().isEmpty() && propertyOptionsDto.getEstado() == null && !propertyOptionsDto.getAscensor() &&
+            !propertyOptionsDto.getGaraje() && !propertyOptionsDto.getExterior() && !propertyOptionsDto.getAmueblado() &&
+            !propertyOptionsDto.getTrastero() && !propertyOptionsDto.getJardin() && !propertyOptionsDto.getTerraza() &&
+            !propertyOptionsDto.getCalefaccion() && !propertyOptionsDto.getPiscina()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     @PostMapping("/new")
     public void newPost(@RequestAttribute Long userId, @Validated @RequestBody PostDto postDto) {
 
@@ -30,11 +44,17 @@ public class PostController {
     @GetMapping
     public ResponseEntity<Map<String, Object>> getListings(
             @RequestParam(required = false, defaultValue = "") String city,
+            @ModelAttribute PropertyOptionsDto propertyOptionsDto,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "0") int size
     ) {
         Pageable paging = PageRequest.of(page, size);
-        Page<Post> pageListings = postsService.findByCityContainingIgnoreCase(city, paging);
+        Page<Post> pageListings = null;
+        if (isFiltersEnabled(propertyOptionsDto)) {
+            pageListings = postsService.findByCityAndFiltersContainingIgnoreCase(city, propertyOptionsDto, paging);
+        } else {
+            pageListings = postsService.findByCityContainingIgnoreCase(city, paging);
+        }
 
         Map<String, Object> map = new HashMap<>();
         map.put("listings", pageListings.getContent());

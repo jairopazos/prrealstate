@@ -4,6 +4,7 @@ import com.tfm.inmopr.model.entities.Address;
 import com.tfm.inmopr.model.entities.AddressDao;
 import com.tfm.inmopr.model.entities.Post;
 import com.tfm.inmopr.model.entities.PostDao;
+import com.tfm.inmopr.rest.controller.PropertyOptionsDto;
 import com.tfm.inmopr.rest.dtos.PostDto;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,16 @@ public class PostsServiceImpl implements PostsService{
         postName = post.getTipoVivienda() + " en " + post.getTipoAnuncio() + " en " + post.getAddress().getCity();
         post.setName(postName);
         postDao.save(post);
+    }
+
+    @Override
+    public Page<Post> findByCityAndFiltersContainingIgnoreCase(String city, PropertyOptionsDto propertyOptionsDto, Pageable pageable) {
+        return postDao.findByAddress_CityAndFiltersContainingIgnoreCase(city, propertyOptionsDto.getTipoAnuncio(), propertyOptionsDto.getTipoVivienda(),
+            propertyOptionsDto.getPrecioMaximo(), propertyOptionsDto.getNumHabitaciones(), propertyOptionsDto.getNumBanos(),
+            propertyOptionsDto.getMetrosConstruidos(), propertyOptionsDto.getMetrosUtiles(), propertyOptionsDto.getEstado(),
+            propertyOptionsDto.getAscensor(), propertyOptionsDto.getGaraje(), propertyOptionsDto.getExterior(), propertyOptionsDto.getAmueblado(),
+            propertyOptionsDto.getTrastero(), propertyOptionsDto.getJardin(), propertyOptionsDto.getTerraza(), propertyOptionsDto.getCalefaccion(), propertyOptionsDto.getPiscina(),
+            pageable);
     }
 
     @Override

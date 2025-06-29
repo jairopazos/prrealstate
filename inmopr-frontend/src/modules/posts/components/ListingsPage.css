@@ -76,7 +76,7 @@
 
 
 .filter-field {
-    width: 200px; /* Ajusta el ancho deseado */
+    width: 19vh; /* Ajusta el ancho deseado */
     padding: 6px; /* Ajusta el padding deseado */
     border: 1px solid #ccc; /* Ajusta el borde deseado */
     border-radius: 4px; /* Ajusta el radio del borde deseado */
@@ -91,8 +91,8 @@
 }
 
 .filter-field-button {
-    width: 200px; /* Ajusta el ancho deseado */
-    padding: 4px; /* Ajusta el padding deseado */
+    width: 250px; /* Ajusta el ancho deseado */
+    padding: 6px; /* Ajusta el padding deseado */
     border: 1px solid #ccc; /* Ajusta el borde deseado */
     border-radius: 4px; /* Ajusta el radio del borde deseado */
     font-size: 1rem; /* Ajusta el tamaño de la fuente deseado */
@@ -103,4 +103,70 @@
 .filter-field-button {
     font-family: 'Merriweather', serif;
     max-width: 100px;
+}
+
+.suggestions-dropdown {
+    display: block; /* Asegura que el contenedor sea visible */
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f9f9f9; /* Establecer un color de fondo para el contenedor */
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para visibilidad */
+}
+
+.suggestions-dropdown label {
+    display: block; /* Asegura que cada checkbox esté en su propia línea */
+    margin-bottom: 10px; /* Espaciado entre los checkboxes */
+    font-size: 16px; /* Aumenta el tamaño del texto si es necesario */
+    cursor: pointer; /* Cambia el cursor cuando se pase por los checkboxes */
+}
+
+/* Estilo para el contenedor de dropdown */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-btn {
+    padding: 7.5px 15px;
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 160px;
+    border: 1px solid #ccc;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 4px;
+}
+
+.dropdown-content label {
+    display: block;
+    padding: 6px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.dropdown-content input {
+    margin-right: 8px;
+}
+
+/* Mostrar el contenido cuando el dropdown está activo */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Añadir hover a los items dentro del dropdown */
+.dropdown-content label:hover {
+    background-color: #f1f1f1;
 }

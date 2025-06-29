@@ -26,14 +26,38 @@ const ListingsPage = () => {
         precioMax: '',
         habitaciones: '',
         banos: '',
+        metrosConstruidos: '',
+        metrosUtiles: '',
         estado: '',
         comodidades: {
-            piscina: false,
-            jardin: false,
-            garaje: false,
             ascensor: false,
+            garaje: false,
+            exterior: false,
+            amueblado: false,
+            trastero: false,
+            jardin: false,
+            terraza: false,
+            calefaccion: false,
+            piscina: false
         }
     });
+
+     const backendFilters = {
+        tipoAnuncio: filters.tipoAnuncio,
+        tipoVivienda: filters.tipoVivienda,
+        precioMaximo: filters.precioMax,
+        numHabitaciones: filters.habitaciones,
+        numBanos: filters.banos,
+        metrosConstruidos: filters.metrosConstruidos || null,
+        metrosUtiles: filters.metrosUtiles || null,
+        estado: filters.estado,
+        comodidades: Object.entries(filters.comodidades)
+            .filter(([_, value]) => value)
+            .reduce((acc, [key]) => {
+                acc[key] = true;
+                return acc;
+            }, {})
+    };
 
     const handleFilterChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -54,30 +78,52 @@ const ListingsPage = () => {
         navigate('/listing/details', { state: { property } });
     };
 
-    useEffect(() => {
-        if (!city) return;
-
+    const loadListings = (newPage = 0) => {
         setLoading(true);
         setError(null);
 
-        dispatch(
-            actions.fetchListings(
-                city,
-                0,
-                10,
-                data => {
-                    setListings(data.listings || []);
-                    setTotalPages(data.totalPages);
-                    setPage(data.currentPage + 1);
-                    setLoading(false);
-                },
-                err => {
-                    setError(err.message || 'Error al cargar los anuncios');
-                    setLoading(false);
-                }
-            )
-        );
-    }, [city, page]);
+        const flatParams = {
+            city,
+            page: newPage,
+            size: 10,
+            tipoAnuncio: filters.tipoAnuncio,
+            tipoVivienda: filters.tipoVivienda,
+            precioMaximo: filters.precioMax,
+            numHabitaciones: filters.habitaciones,
+            numBanos: filters.banos,
+            metrosConstruidos: filters.metrosConstruidos,
+            metrosUtiles: filters.metrosUtiles,
+            estado: filters.estado,
+            ...Object.entries(filters.comodidades).reduce((acc, [key, value]) => {
+                acc[key] = value;
+                return acc;
+            }, {})
+        };
+
+        const queryString = new URLSearchParams(flatParams).toString();
+
+        fetch(`/listings?${queryString}`)
+            .then(res => res.ok ? res.json() : Promise.reject(res))
+            .then(data => {
+                setListings(data.listings || []);
+                setTotalPages(data.totalPages);
+                setPage(data.currentPage + 1);
+                setLoading(false);
+            })
+            .catch(err => {
+                setError('Error al cargar los anuncios');
+                setLoading(false);
+            });
+    };
+
+
+
+    useEffect(() => {
+        if (city) {
+            loadListings(0);
+        }
+    }, [city]);
+
 
     const handlePageChange = (newPage) => {
         if (newPage >= 0 && newPage < totalPages) {
@@ -131,6 +177,26 @@ const ListingsPage = () => {
                     <option value="3">3+</option>
                 </select>
 
+                <input
+                    type="number"
+                    name="metrosConstruidos"
+                    className="filter-field"
+                    placeholder="Metros construidos"
+                    value={filters.metrosConstruidos}
+                    onChange={handleFilterChange}
+                    min="0"
+                />
+
+                <input
+                    type="number"
+                    name="metrosUtiles"
+                    className="filter-field"
+                    placeholder="Metros útiles"
+                    value={filters.metrosUtiles}
+                    onChange={handleFilterChange}
+                    min="0"
+                />
+
                 <select name="estado"  className="filter-field" value={filters.estado} onChange={handleFilterChange}>
                     <option value="">Estado</option>
                     <option value="obra_nueva">Obra nueva</option>
@@ -138,17 +204,39 @@ const ListingsPage = () => {
                     <option value="a_reformar">A reformar</option>
                 </select>
 
-                <div className="suggestions-dropdown">
-                    {['piscina', 'jardin', 'garaje', 'ascensor'].map((amenity) => (
-                        <label key={amenity}>
-                            <input type="checkbox" name={amenity} checked={filters.comodidades[amenity]} onChange={handleFilterChange} />
-                            {amenity.charAt(0).toUpperCase() + amenity.slice(1)}
-                        </label>
-                    ))}
+                {/* Desplegable de comodidades con checkboxes */}
+                <div className="dropdown">
+                    <button className="dropdown-btn">
+                        Comodidades
+                    </button>
+                    <div className="dropdown-content">
+                        {[
+                            'ascensor', 'garaje', 'exterior', 'amueblado',
+                            'trastero', 'jardin', 'terraza', 'calefaccion', 'piscina'
+                        ].map((amenity) => (
+                            <label key={amenity}>
+                                <input
+                                    type="checkbox"
+                                    name={amenity}
+                                    checked={filters.comodidades[amenity]}
+                                    onChange={handleFilterChange}
+                                />
+                                {amenity.charAt(0).toUpperCase() + amenity.slice(1)}
+                            </label>
+                        ))}
+                    </div>
                 </div>
+
+
+
+
 
                 <button className="filter-field-button" onClick={() => navigate('/listings/map', { state: { listings } })}>
                     Mapa 🗺️
+                </button>
+
+                <button className="filter-field-button" onClick={() => loadListings(0)}>
+                    Buscar
                 </button>
             </div>
 

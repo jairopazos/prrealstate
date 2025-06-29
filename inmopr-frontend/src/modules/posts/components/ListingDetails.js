@@ -1,14 +1,15 @@
 import { useLocation } from "react-router-dom";
-import { useState } from "react";
-
+import React, { useState } from "react";
+import {useNavigate} from "react-router-dom";
 import './ListingDetails.css';
+import { FormattedMessage, useIntl } from "react-intl";
 
 const ListingDetails = () => {
     const location = useLocation();
     const property = location.state?.property;
-
+    const navigate = useNavigate();
     const [currentIndex, setCurrentIndex] = useState(0);
-
+    const intl = useIntl();
     const creationDate = property.creationDate; // Asegúrate de usar la propiedad correcta
     const modificationDate = property.modificationDate; // Asegúrate de usar la propiedad correcta
 
@@ -66,6 +67,9 @@ const ListingDetails = () => {
 
     return (
         <div className="property-details">
+            <button className="back-button" onClick={() => navigate(-1)}>
+                ⮌ <FormattedMessage id="project.app.button.back" defaultMessage={intl.formatMessage({ id: "project.app.back" })} />
+            </button>
             <div className="details-wrapper">
                 {/* IZQUIERDA */}
                 <div className="left-panel">
@@ -86,7 +90,7 @@ const ListingDetails = () => {
                     <h3 className="property-precio">Características</h3>
                     <p className="caracteristicas-p">Metros construidos: {property.metrosConstruidos}</p>
                     <p className="property-precio-p">Metros útiles: {property.metrosUtiles}</p>
-                    <p className="property-precio-p">Número de habitaciones: FALTA</p>
+                    <p className="property-precio-p">Número de habitaciones: {property.numHabitaciones}</p>
                     <p className="property-precio-p">Número de baños: {property.numBanos}</p>
                     <p className="property-precio-p">Estado: {property.estado}</p>
                     <p className="property-precio-p">Orientación: {property.orientacion}</p>
