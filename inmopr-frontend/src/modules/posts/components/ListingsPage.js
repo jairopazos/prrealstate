@@ -19,6 +19,10 @@ const ListingsPage = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const [isDropdownOpen, setDropdownOpen] = useState(false);
+
+    const toggleDropdown = () => setDropdownOpen(prev => !prev);
+    const closeDropdown = () => setDropdownOpen(false);
 
     const [filters, setFilters] = useState({
         tipoAnuncio: '',
@@ -197,35 +201,55 @@ const ListingsPage = () => {
                     min="0"
                 />
 
-                <select name="estado"  className="filter-field" value={filters.estado} onChange={handleFilterChange}>
-                    <option value="">Estado</option>
-                    <option value="obra_nueva">Obra nueva</option>
-                    <option value="buen_estado">Buen estado</option>
-                    <option value="a_reformar">A reformar</option>
-                </select>
-
                 {/* Desplegable de comodidades con checkboxes */}
-                <div className="dropdown">
-                    <button className="dropdown-btn">
-                        Comodidades
+                <div
+                    className="dropdown"
+                    onBlur={(e) => {
+                        if (!e.currentTarget.contains(e.relatedTarget)) closeDropdown();
+                    }}
+                    tabIndex={0}
+                >
+                    <button className="dropdown-btn" onClick={toggleDropdown}>
+                        Más opciones
                     </button>
-                    <div className="dropdown-content">
-                        {[
-                            'ascensor', 'garaje', 'exterior', 'amueblado',
-                            'trastero', 'jardin', 'terraza', 'calefaccion', 'piscina'
-                        ].map((amenity) => (
-                            <label key={amenity}>
-                                <input
-                                    type="checkbox"
-                                    name={amenity}
-                                    checked={filters.comodidades[amenity]}
+
+                    {isDropdownOpen && (
+                        <div className="dropdown-content" tabIndex={0}>
+                            <label>
+                                Estado:
+                                <select
+                                    name="estado"
+                                    className="dropdown-select"
+                                    value={filters.estado}
                                     onChange={handleFilterChange}
-                                />
-                                {amenity.charAt(0).toUpperCase() + amenity.slice(1)}
+                                >
+                                    <option value="">(Todos)</option>
+                                    <option value="obra_nueva">Obra nueva</option>
+                                    <option value="buen_estado">Buen estado</option>
+                                    <option value="a_reformar">A reformar</option>
+                                </select>
                             </label>
-                        ))}
-                    </div>
+
+
+                            {[
+                                'ascensor', 'garaje', 'exterior', 'amueblado',
+                                'trastero', 'jardin', 'terraza', 'calefaccion', 'piscina'
+                            ].map((amenity) => (
+                                <label key={amenity}>
+                                    <input
+                                        type="checkbox"
+                                        name={amenity}
+                                        checked={filters.comodidades[amenity]}
+                                        onChange={handleFilterChange}
+                                    />
+                                    {amenity.charAt(0).toUpperCase() + amenity.slice(1)}
+                                </label>
+                            ))}
+                        </div>
+                    )}
                 </div>
+
+
 
 
 

@@ -51,6 +51,9 @@ public class PostController {
         Pageable paging = PageRequest.of(page, size);
         Page<Post> pageListings = null;
         if (isFiltersEnabled(propertyOptionsDto)) {
+            if (propertyOptionsDto.getPrecioMaximo().isEmpty()) {
+                propertyOptionsDto.setPrecioMaximo(null);
+            }
             pageListings = postsService.findByCityAndFiltersContainingIgnoreCase(city, propertyOptionsDto, paging);
         } else {
             pageListings = postsService.findByCityContainingIgnoreCase(city, paging);
