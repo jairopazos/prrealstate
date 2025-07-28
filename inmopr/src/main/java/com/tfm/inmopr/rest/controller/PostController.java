@@ -1,6 +1,8 @@
 package com.tfm.inmopr.rest.controller;
 
+import com.tfm.inmopr.model.entities.EmailRequest;
 import com.tfm.inmopr.model.entities.Post;
+import com.tfm.inmopr.model.entities.PostDao;
 import com.tfm.inmopr.model.services.PostsService;
 import com.tfm.inmopr.rest.dtos.PostDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+
+import static com.tfm.inmopr.rest.dtos.PostConversor.toPostDto;
 
 @RestController
 @RequestMapping("/listings")
@@ -20,6 +25,9 @@ public class PostController {
 
     @Autowired
     private PostsService postsService;
+
+    @Autowired
+    private PostDao postDao;
 
     private Boolean isFiltersEnabled(PropertyOptionsDto propertyOptionsDto) {
         if (propertyOptionsDto.getTipoAnuncio() == null && propertyOptionsDto.getTipoVivienda() == null &&
@@ -67,4 +75,31 @@ public class PostController {
 
         return ResponseEntity.ok(map);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PostDto> getListingById(@PathVariable Long id) {
+        Optional<Post> listingOpt = postDao.findById(id);
+        if (listingOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        PostDto postDto = toPostDto(listingOpt.get());
+        return ResponseEntity.ok(postDto);
+    }
+
+    @PostMapping("/send-email")
+    public ResponseEntity<String> sendEmail(@RequestBody EmailRequest request) {
+        try {
+            postsService.sendEmail(
+                    request.getTo(),
+                    request.getFrom(),
+                    request.getSubject(),
+                    request.getMessage() // Este ahora es HTML
+            );
+            return ResponseEntity.ok("Email enviado con éxito.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error al enviar el email.");
+        }
+    }
+
 }

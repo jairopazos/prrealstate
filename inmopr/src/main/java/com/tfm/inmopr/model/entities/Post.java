@@ -1,7 +1,11 @@
 package com.tfm.inmopr.model.entities;
 
 import com.tfm.inmopr.model.converters.ListToStringConverter;
+import com.tfm.inmopr.rest.dtos.UserDto;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -37,6 +41,7 @@ public class Post {
     private Boolean piscina;
     private Estado estado;
     private BigDecimal precio;
+    private String email;
 
     public Post() {}
 
@@ -44,7 +49,7 @@ public class Post {
                 String ownerName, String telephone, LocalDateTime creationDate, LocalDateTime modificationDate, Address address,
                 Boolean ascensor, Boolean garaje, String metrosConstruidos, String metrosUtiles, String numHabitaciones, String numBanos,
                 Boolean exterior, Orientacion orientacion, Boolean amueblado, Boolean trastero, Boolean jardin, Boolean terraza,
-                Boolean calefaccion, Boolean piscina, Estado estado, BigDecimal precio) {
+                Boolean calefaccion, Boolean piscina, Estado estado, BigDecimal precio, String email) {
         this.name = name;
         this.tipoAnuncio = tipoAnuncio;
         this.tipoVivienda = tipoVivienda;
@@ -71,12 +76,13 @@ public class Post {
         this.piscina = piscina;
         this.estado = estado;
         this.precio = precio;
+        this.email = email;
     }
 
     public Post(TipoAnuncio tipoAnuncio, TipoVivienda tipoVivienda, String description, List<String> urls, String ownerName,
                 String telephone, Address address, Boolean ascensor, Boolean garaje, String metrosConstruidos, String metrosUtiles, String numHabitaciones, String numBanos,
                 Boolean exterior, Orientacion orientacion, Boolean amueblado, Boolean trastero, Boolean jardin, Boolean terraza,
-                Boolean calefaccion, Boolean piscina, Estado estado, BigDecimal precio) {
+                Boolean calefaccion, Boolean piscina, Estado estado, BigDecimal precio, String email) {
         this.tipoAnuncio = tipoAnuncio;
         this.tipoVivienda = tipoVivienda;
         this.description = description;
@@ -100,6 +106,7 @@ public class Post {
         this.piscina = piscina;
         this.estado = estado;
         this.precio = precio;
+        this.email = email;
     }
 
     @Id
@@ -331,4 +338,14 @@ public class Post {
         this.precio = precio;
     }
 
+    @NotNull(groups={UserDto.AllValidations.class, UserDto.UpdateValidations.class})
+    @Size(min=1, max=60, groups={UserDto.AllValidations.class, UserDto.UpdateValidations.class})
+    @Email(groups={UserDto.AllValidations.class, UserDto.UpdateValidations.class})
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email.trim();
+    }
 }

@@ -1,6 +1,8 @@
 package com.tfm.inmopr.rest.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tfm.inmopr.model.entities.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -19,6 +21,7 @@ public class PostDto {
     private String telephone;
     private LocalDateTime creationDate;
     private LocalDateTime modificationDate;
+    @JsonIgnore
     private Address address;
     private Boolean ascensor;
     private Boolean garaje;
@@ -36,6 +39,7 @@ public class PostDto {
     private Boolean piscina;
     private Estado estado;
     private String precio;
+    private String email;
 
     public PostDto() {}
 
@@ -43,7 +47,7 @@ public class PostDto {
                    List<String> urls, String ownerName, String telephone, LocalDateTime creationDate, LocalDateTime modificationDate,
                    Address address, Boolean ascensor, Boolean garaje, String metrosConstruidos, String metrosUtiles, String numHabitaciones, String numBanos,
                    Boolean exterior, Orientacion orientacion, Boolean amueblado, Boolean trastero, Boolean jardin, Boolean terraza,
-                   Boolean calefaccion, Boolean piscina, Estado estado, String precio) {
+                   Boolean calefaccion, Boolean piscina, Estado estado, String precio, String email) {
         this.id = id;
         this.name = name;
         this.tipoAnuncio = tipoAnuncio;
@@ -71,10 +75,45 @@ public class PostDto {
         this.piscina = piscina;
         this.estado = estado;
         this.precio = precio;
+        this.email = email;
+    }
+
+    public PostDto(String name, TipoAnuncio tipoAnuncio, TipoVivienda tipoVivienda, String description,
+                   List<String> urls, String ownerName, String telephone, LocalDateTime creationDate, LocalDateTime modificationDate,
+                   Address address, Boolean ascensor, Boolean garaje, String metrosConstruidos, String metrosUtiles, String numHabitaciones, String numBanos,
+                   Boolean exterior, Orientacion orientacion, Boolean amueblado, Boolean trastero, Boolean jardin, Boolean terraza,
+                   Boolean calefaccion, Boolean piscina, Estado estado, String precio, String email) {
+        this.name = name;
+        this.tipoAnuncio = tipoAnuncio;
+        this.tipoVivienda = tipoVivienda;
+        this.description = description;
+        this.urls = urls;
+        this.ownerName = ownerName;
+        this.telephone = telephone;
+        this.creationDate = creationDate;
+        this.modificationDate = modificationDate;
+        this.address = address;
+        this.ascensor = ascensor;
+        this.garaje = garaje;
+        this.metrosConstruidos = metrosConstruidos;
+        this.metrosUtiles = metrosUtiles;
+        this.numHabitaciones = numHabitaciones;
+        this.numBanos = numBanos;
+        this.exterior = exterior;
+        this.orientacion = orientacion;
+        this.amueblado = amueblado;
+        this.trastero = trastero;
+        this.jardin = jardin;
+        this.terraza = terraza;
+        this.calefaccion = calefaccion;
+        this.piscina = piscina;
+        this.estado = estado;
+        this.precio = precio;
+        this.email = email;
     }
 
     public PostDto(Long id, TipoAnuncio tipoAnuncio, TipoVivienda tipoVivienda, String description, List<String> urls,
-                   String ownerName, String telephone, Address address, String precio) {
+                   String ownerName, String telephone, Address address, String precio, String email) {
         this.id = id;
         this.tipoAnuncio = tipoAnuncio;
         this.tipoVivienda = tipoVivienda;
@@ -84,6 +123,7 @@ public class PostDto {
         this.telephone = telephone;
         this.address = address;
         this.precio = precio;
+        this.email = email;
     }
 
     public Long getId() {
@@ -325,4 +365,14 @@ public class PostDto {
         this.precio = precio;
     }
 
+    @NotNull(groups={UserDto.AllValidations.class, UserDto.UpdateValidations.class})
+    @Size(min=1, max=60, groups={UserDto.AllValidations.class, UserDto.UpdateValidations.class})
+    @Email(groups={UserDto.AllValidations.class, UserDto.UpdateValidations.class})
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email.trim();
+    }
 }

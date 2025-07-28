@@ -79,8 +79,9 @@ const ListingsPage = () => {
     };
 
     const handleCardClick = (property) => {
-        navigate('/listing/details', { state: { property } });
+        navigate(`/listing/details/${property.id}`);
     };
+
 
     const loadListings = (newPage = 0) => {
         setLoading(true);

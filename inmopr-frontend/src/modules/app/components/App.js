@@ -33,7 +33,7 @@ const AppContent = () => {
                 <Route path="listings/new/uploadDataDetails" element={<UploadDataDetails />} />
                 <Route path="listings/new/uploadContactInformation" element={<UploadContactInformation />} />
                 <Route path="listings/map" element={<ListingsMap />} />
-                <Route path="listing/details" element={<ListingDetails />} />
+                <Route path="listing/details/:id" element={<ListingDetails />} />
 
             </Routes>
         </div>

@@ -11,6 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 
 import java.time.LocalDateTime;
 
@@ -25,6 +29,9 @@ public class PostsServiceImpl implements PostsService{
 
     @Autowired
     private AddressDao addressDao;
+
+    @Autowired
+    private JavaMailSender mailSender;
 
 
     @Override
@@ -58,5 +65,27 @@ public class PostsServiceImpl implements PostsService{
     @Override
     public Page<Post> findByCityContainingIgnoreCase(String city, Pageable pageable) {
         return postDao.findByAddress_CityContainingIgnoreCase(city, pageable);
+    }
+
+    @Override
+    public void sendEmail(String to, String from, String subject, String htmlBody) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+
+            // El "true" activa multipart (necesario si hay adjuntos o HTML)
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(to);
+            helper.setFrom(from);
+            helper.setSubject(subject);
+
+            // Este true indica que el contenido es HTML, no texto plano
+            helper.setText(htmlBody, true);
+
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error al enviar correo HTML", e);
+        }
     }
 }

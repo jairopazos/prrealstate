@@ -18,6 +18,7 @@ const UploadData = ({ onUploadComplete }) => {
     const navigate = useNavigate();
     const [telephone, setTelephone] = useState('');
     const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [showSuccess, setShowSuccess] = useState(false);
 
@@ -51,7 +52,8 @@ const UploadData = ({ onUploadComplete }) => {
                     calefaccion: postData.calefaccion,
                     piscina: postData.piscina,
                     estado: postData.estado,
-                    precio: postData.formattedPrice
+                    precio: postData.formattedPrice,
+                    email: email
                 },
                     () => setSuccessMessage(intl.formatMessage({
                         id: "project.publish.success",
@@ -119,6 +121,13 @@ const UploadData = ({ onUploadComplete }) => {
                             <input type="telephone" name="telephone" id="telephone" className="input-field" value={telephone} onChange={(e) => setTelephone(e.target.value)} required/>
 
                             <br></br><br></br><br></br>
+
+                            <h3 className="publish-title">
+                                <FormattedMessage id="project.global.fields.email"/>
+                            </h3>
+                            <input type="email" name="email" id="email" className="input-field" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                            <br></br><br></br><br></br>
+
                             <button className="continue-button">
                                 <FormattedMessage id="project.app.login.form.upload"/>
                             </button>

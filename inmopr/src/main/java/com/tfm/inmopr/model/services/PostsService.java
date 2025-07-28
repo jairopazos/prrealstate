@@ -12,4 +12,6 @@ public interface PostsService {
     Page<Post> findByCityAndFiltersContainingIgnoreCase(String city, PropertyOptionsDto propertyOptionsDto, Pageable pageable);
 
     Page<Post> findByCityContainingIgnoreCase(String city, Pageable pageable);
+
+    void sendEmail(String to, String from, String subject, String body);
 }

@@ -12,5 +12,8 @@ export const isLoggedIn = state =>
 export const getFirstName = state =>
     isLoggedIn(state) ? getUser(state).firstName : null;
 
+export const getEmail = state =>
+    isLoggedIn(state) ? getUser(state).email : null;
+
 
 
