@@ -1,1 +1,1 @@
-
+export const selectListings = (state) => state.listings.listings;

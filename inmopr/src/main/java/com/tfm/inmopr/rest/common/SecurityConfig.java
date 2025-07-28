@@ -42,9 +42,13 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/users/signUp").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/listings/new").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/listings/send-email").permitAll()
                         .requestMatchers(HttpMethod.PUT,"/users/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/listings**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/listings/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/listings**").permitAll()
                         .anyRequest().denyAll()
-                );
+                ); 
 
         return http.build();
     }

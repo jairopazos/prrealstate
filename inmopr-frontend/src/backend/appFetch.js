@@ -28,6 +28,15 @@ const handleOkResponse = (response, onSuccess) => {
         return true;
     }
 
+    // Si no es JSON, tratamos la respuesta como texto
+    if (!isJson(response)) {
+        response.text().then(payload => {
+            console.log('Text response:', payload);  // Debugging line
+            onSuccess(payload);  // Llamamos a onSuccess con el texto
+        });
+        return true;
+    }
+
     if (isJson(response)) {
         response.json().then(payload => onSuccess(payload));
     }
@@ -66,6 +75,7 @@ const handle4xxResponse = (response, onErrors) => {
 }
 
 const handleResponse = (response, onSuccess, onErrors) => {
+    console.log('Response received:', response);  // Debugging line
 
     if (handleOkResponse(response, onSuccess)) {
         return;

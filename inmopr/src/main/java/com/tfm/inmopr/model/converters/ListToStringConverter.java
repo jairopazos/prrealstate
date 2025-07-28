@@ -23,10 +23,22 @@ public class ListToStringConverter implements AttributeConverter<List<String>, S
         if (json == null || json.trim().isEmpty() || json.equals("[]")) {
             return List.of();
         }
-        // Elimina los corchetes y comillas, luego divide
-        String content = json.substring(1, json.length() - 1);
-        return Arrays.stream(content.split("\",\""))
-                .map(s -> s.replace("\"", ""))
+
+        // Elimina los corchetes iniciales y finales
+        String content = json.substring(1, json.length() - 1).trim();
+
+        // Si la cadena está vacía después de eliminar los corchetes, devuelve una lista vacía
+        if (content.isEmpty()) {
+            return List.of();
+        }
+
+        // Reemplaza las comas dentro de las comillas por un carácter de separación seguro
+        String[] parts = content.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+
+        // Elimina las comillas alrededor de cada elemento
+        return Arrays.stream(parts)
+                .map(s -> s.replace("\"", "").trim())
                 .collect(Collectors.toList());
     }
+
 }

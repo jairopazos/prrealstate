@@ -1,0 +1,41 @@
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+}
+
+.carousel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 24px;
+    padding: 8px 12px;
+    cursor: pointer;
+    z-index: 2;
+    opacity: 0; /* Ocultas por defecto */
+    transition: opacity 0.3s ease;
+}
+
+.arrow.left {
+    left: 10px;
+}
+
+.arrow.right {
+    right: 10px;
+}
+
+/* ✅ Mostrar flechas solo al hacer hover sobre la tarjeta */
+.listing-card:hover .arrow {
+    opacity: 1;
+}

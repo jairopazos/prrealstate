@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux';
 import * as actions from '../actions';
 import './ListingsPage.css';
 import {FormattedMessage} from "react-intl";
+import { useNavigate } from 'react-router-dom';
+import ListingCard from './ListingCard'; // NUEVO
 
 const useQuery = () => new URLSearchParams(useLocation().search);
 
@@ -11,11 +13,16 @@ const ListingsPage = () => {
     const dispatch = useDispatch();
     const query = useQuery();
     const city = query.get('city') || '';
-    const [page, setPage] = useState(0);  // Estado para manejar la paginación
+    const [page, setPage] = useState(0);
     const [listings, setListings] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [totalPages, setTotalPages] = useState(0);  // Estado para el total de páginas
+    const [totalPages, setTotalPages] = useState(0);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
+    const [isDropdownOpen, setDropdownOpen] = useState(false);
+
+    const toggleDropdown = () => setDropdownOpen(prev => !prev);
+    const closeDropdown = () => setDropdownOpen(false);
 
     const [filters, setFilters] = useState({
         tipoAnuncio: '',
@@ -23,14 +30,38 @@ const ListingsPage = () => {
         precioMax: '',
         habitaciones: '',
         banos: '',
+        metrosConstruidos: '',
+        metrosUtiles: '',
         estado: '',
         comodidades: {
-            piscina: false,
-            jardin: false,
-            garaje: false,
             ascensor: false,
+            garaje: false,
+            exterior: false,
+            amueblado: false,
+            trastero: false,
+            jardin: false,
+            terraza: false,
+            calefaccion: false,
+            piscina: false
         }
     });
+
+     const backendFilters = {
+        tipoAnuncio: filters.tipoAnuncio,
+        tipoVivienda: filters.tipoVivienda,
+        precioMaximo: filters.precioMax,
+        numHabitaciones: filters.habitaciones,
+        numBanos: filters.banos,
+        metrosConstruidos: filters.metrosConstruidos || null,
+        metrosUtiles: filters.metrosUtiles || null,
+        estado: filters.estado,
+        comodidades: Object.entries(filters.comodidades)
+            .filter(([_, value]) => value)
+            .reduce((acc, [key]) => {
+                acc[key] = true;
+                return acc;
+            }, {})
+    };
 
     const handleFilterChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -47,33 +78,58 @@ const ListingsPage = () => {
         }
     };
 
-    useEffect(() => {
-        console.log('City:', city);  // Agrega este log para ver cuando `city` cambia
-        if (!city) return;
+    const handleCardClick = (property) => {
+        navigate(`/listing/details/${property.id}`);
+    };
 
+
+    const loadListings = (newPage = 0) => {
         setLoading(true);
         setError(null);
 
-        dispatch(
-            actions.fetchListings(
-                city,
-                0, // página 0
-                10,
-                data => {
-                    setListings(data.listings || []);
-                    setTotalPages(data.totalPages);
-                    setPage(data.currentPage + 1);
-                    setLoading(false);
-                },
-                err => {
-                    setError(err.message || 'Error al cargar los anuncios');
-                    setLoading(false);
-                }
-            )
-        );
-    }, [city, page]);
+        const flatParams = {
+            city,
+            page: newPage,
+            size: 10,
+            tipoAnuncio: filters.tipoAnuncio,
+            tipoVivienda: filters.tipoVivienda,
+            precioMaximo: filters.precioMax,
+            numHabitaciones: filters.habitaciones,
+            numBanos: filters.banos,
+            metrosConstruidos: filters.metrosConstruidos,
+            metrosUtiles: filters.metrosUtiles,
+            estado: filters.estado,
+            ...Object.entries(filters.comodidades).reduce((acc, [key, value]) => {
+                acc[key] = value;
+                return acc;
+            }, {})
+        };
 
-    // Función para manejar la paginación
+        const queryString = new URLSearchParams(flatParams).toString();
+
+        fetch(`/listings?${queryString}`)
+            .then(res => res.ok ? res.json() : Promise.reject(res))
+            .then(data => {
+                setListings(data.listings || []);
+                setTotalPages(data.totalPages);
+                setPage(data.currentPage + 1);
+                setLoading(false);
+            })
+            .catch(err => {
+                setError('Error al cargar los anuncios');
+                setLoading(false);
+            });
+    };
+
+
+
+    useEffect(() => {
+        if (city) {
+            loadListings(0);
+        }
+    }, [city]);
+
+
     const handlePageChange = (newPage) => {
         if (newPage >= 0 && newPage < totalPages) {
             setPage(newPage);
@@ -88,7 +144,6 @@ const ListingsPage = () => {
 
             {/* FILTROS */}
             <div className="filters-row">
-
                 <select name="tipoAnuncio" className="filter-field" value={filters.tipoAnuncio} onChange={handleFilterChange}>
                     <option value="">Tipo de anuncio</option>
                     <option value="venta">Venta</option>
@@ -127,79 +182,109 @@ const ListingsPage = () => {
                     <option value="3">3+</option>
                 </select>
 
-                <select name="estado"  className="filter-field" value={filters.estado} onChange={handleFilterChange}>
-                    <option value="">Estado</option>
-                    <option value="obra_nueva">Obra nueva</option>
-                    <option value="buen_estado">Buen estado</option>
-                    <option value="a_reformar">A reformar</option>
-                </select>
+                <input
+                    type="number"
+                    name="metrosConstruidos"
+                    className="filter-field"
+                    placeholder="Metros construidos"
+                    value={filters.metrosConstruidos}
+                    onChange={handleFilterChange}
+                    min="0"
+                />
 
-                <div className="suggestions-dropdown">
-                    <label>
-                        <input type="checkbox" name="piscina" checked={filters.comodidades.piscina} onChange={handleFilterChange} />
-                        Piscina
-                    </label>
-                    <label>
-                        <input type="checkbox" name="jardin" checked={filters.comodidades.jardin} onChange={handleFilterChange} />
-                        Jardín
-                    </label>
-                    <label>
-                        <input type="checkbox" name="garaje" checked={filters.comodidades.garaje} onChange={handleFilterChange} />
-                        Garaje
-                    </label>
-                    <label>
-                        <input type="checkbox" name="ascensor" checked={filters.comodidades.ascensor} onChange={handleFilterChange} />
-                        Ascensor
-                    </label>
+                <input
+                    type="number"
+                    name="metrosUtiles"
+                    className="filter-field"
+                    placeholder="Metros útiles"
+                    value={filters.metrosUtiles}
+                    onChange={handleFilterChange}
+                    min="0"
+                />
+
+                {/* Desplegable de comodidades con checkboxes */}
+                <div
+                    className="dropdown"
+                    onBlur={(e) => {
+                        if (!e.currentTarget.contains(e.relatedTarget)) closeDropdown();
+                    }}
+                    tabIndex={0}
+                >
+                    <button className="dropdown-btn" onClick={toggleDropdown}>
+                        Más opciones
+                    </button>
+
+                    {isDropdownOpen && (
+                        <div className="dropdown-content" tabIndex={0}>
+                            <label>
+                                Estado:
+                                <select
+                                    name="estado"
+                                    className="dropdown-select"
+                                    value={filters.estado}
+                                    onChange={handleFilterChange}
+                                >
+                                    <option value="">(Todos)</option>
+                                    <option value="obra_nueva">Obra nueva</option>
+                                    <option value="buen_estado">Buen estado</option>
+                                    <option value="a_reformar">A reformar</option>
+                                </select>
+                            </label>
+
+
+                            {[
+                                'ascensor', 'garaje', 'exterior', 'amueblado',
+                                'trastero', 'jardin', 'terraza', 'calefaccion', 'piscina'
+                            ].map((amenity) => (
+                                <label key={amenity}>
+                                    <input
+                                        type="checkbox"
+                                        name={amenity}
+                                        checked={filters.comodidades[amenity]}
+                                        onChange={handleFilterChange}
+                                    />
+                                    {amenity.charAt(0).toUpperCase() + amenity.slice(1)}
+                                </label>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
-                <button className="filter-field-button" onClick={() => alert("Abrir mapa")}>
-                     Mapa 🗺️
-                </button>
 
-                <button className="filter-field-button" onClick={() => alert("Abrir mapa")}>
+
+
+
+
+
+                <button className="filter-field-button" onClick={() => navigate('/listings/map', { state: { listings } })}>
                     Mapa 🗺️
                 </button>
 
+                <button className="filter-field-button" onClick={() => loadListings(0)}>
+                    Buscar
+                </button>
             </div>
 
-            {loading && <p>
-                <FormattedMessage id="project.app.listings.loading"/>
-            </p>}
+            {loading && <p><FormattedMessage id="project.app.listings.loading" /></p>}
             {error && <p style={{ color: 'red' }}>{error}</p>}
-
 
             <div className="cards-grid">
                 {listings.map((listing) => (
-                    <div key={listing.id} className="listing-card">
-                        <div className="carousel">
-                            {listing.urls?.map((img, idx) => (
-                                <img key={idx} src={img} alt={`listing-${idx}`} />
-                            ))}
-                        </div>
-                        <h3>{listing.name}</h3>
-                        <p className={"listing-description"} >{listing.description}</p>
-                    </div>
+                    <ListingCard
+                        key={listing.id}
+                        listing={listing}
+                        onClick={handleCardClick}
+                    />
                 ))}
             </div>
 
             {/* Paginación */}
             <div className="pagination">
-                <button
-                    disabled={page === 1}
-                    onClick={() => handlePageChange(page - 1)}>
-                    Anterior
-                </button>
+                <button disabled={page === 1} onClick={() => handlePageChange(page - 1)}>Anterior</button>
                 <span>
-                    <FormattedMessage
-                        id="project.app.listings.listings.page"
-                        values={{ page, totalPages }}
-                    />
+                    <FormattedMessage id="project.app.listings.listings.page" values={{ page, totalPages }} />
                 </span>
-                <button
-                    className={"next-button"}
-                    disabled={page === totalPages}
-                    onClick={() => handlePageChange(page + 1)}>
+                <button className="next-button" disabled={page === totalPages} onClick={() => handlePageChange(page + 1)}>
                     <FormattedMessage id="project.app.listings.next"/>
                 </button>
             </div>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const PostCard = ({ title, description, images = [] }) => {
+const PostCard = ({ title, description, images = [], onClick }) => {
     const [currentImage, setCurrentImage] = useState(0);
     const [hovered, setHovered] = useState(false);
 
@@ -13,11 +13,17 @@ const PostCard = ({ title, description, images = [] }) => {
         setCurrentImage((prev) => (prev - 1 + images.length) % images.length);
     };
 
+        const handleClick = (property) => {
+        // Navegamos a la página de detalles, y pasamos la propiedad completa
+        navigate("/detalle", { state: { property } });
+    };
+
     return (
         <div
             className="relative w-full max-w-sm rounded-2xl overflow-hidden shadow-lg border hover:shadow-xl transition"
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
+            onClick={handleClick}
         >
             <div className="relative h-60 w-full bg-gray-200">
                 <img
