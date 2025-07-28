@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2025 inmopr
+ * Licensed under the MIT License. See LICENSE file in the project root for full license information.
+ */
+
 import React, {useState, useEffect, useRef} from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';

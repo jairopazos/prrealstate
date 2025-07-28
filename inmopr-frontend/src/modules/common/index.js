@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2025 inmopr
+ * Licensed under the MIT License. See LICENSE file in the project root for full license information.
+ */
+
 export {default as ConfirmDialog} from "./components/ConfirmDialog";
 export {default as ErrorDialog} from "./components/ErrorDialog";
 export {default as Errors} from "./components/Errors";

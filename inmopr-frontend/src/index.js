@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2025 inmopr
+ * Licensed under the MIT License. See LICENSE file in the project root for full license information.
+ */
+
 import React from 'react';
 import ReactDOM from 'react-dom/client'; // Importa desde 'react-dom/client'
 import 'react-app-polyfill/ie11';
