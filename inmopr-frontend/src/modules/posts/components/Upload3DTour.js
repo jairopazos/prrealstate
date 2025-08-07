@@ -3,24 +3,25 @@
  * Licensed under the MIT License. See LICENSE file in the project root for full license information.
  */
 
-import React, {useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import './UploadData.css';
 import { FormattedMessage, useIntl } from "react-intl";
 import { PostContext } from './PostContext';
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {Errors} from "../../common";
+import { Errors } from "../../common";
+import MarzipanoTour from './MarzipanoTour';
+import './Upload3DTour.css';
 
 const API_KEY = 'f37fb19bb9876fc87a4f01f097086c6f'; // Reemplaza esto con tu key
 
-const UploadData = ({ onUploadComplete }) => {
+const Upload3DTour = ({ onUploadComplete }) => {
     const [backendErrors, setBackendErrors] = useState(null);
-    const [urls, setUrls] = useState([]);
+    const [urlsPanoramic, setUrlsPanoramic] = useState([]);
+    const [hotspots, setHotspots] = useState([]); // Estado para los hotspots
     const [loading, setLoading] = useState(false);
-    const [description, setDescription] = useState('');
     const [errors, setErrors] = useState(null);
     const intl = useIntl();
-    const [formattedPrice, setFormattedPrice] = useState('');
     const { postData, updatePostData } = useContext(PostContext);
     const navigate = useNavigate();
     const formRef = useRef(null); // Referencia al formulario
@@ -47,7 +48,16 @@ const UploadData = ({ onUploadComplete }) => {
         try {
             const uploads = Array.from(files).map(file => uploadToImgBB(file));
             const results = await Promise.all(uploads);
-            setUrls(results);
+            setUrlsPanoramic(results);
+
+            // Definir los hotspots aquí
+            const newHotspots = [
+                { position: { yaw: 0, pitch: 0.1 }, targetSceneIndex: 1 },
+                { position: { yaw: Math.PI / 2, pitch: 0 }, targetSceneIndex: 2 },
+                { position: { yaw: Math.PI, pitch: 0.1 }, targetSceneIndex: 3 }, // Ejemplo de un hotspot adicional
+            ];
+            setHotspots(newHotspots);
+
             onUploadComplete && onUploadComplete(results);
         } catch (error) {
             setErrors(error.message);
@@ -67,33 +77,26 @@ const UploadData = ({ onUploadComplete }) => {
         handleFiles(files);
     };
 
-    const handlePriceChange = (e) => {
-        const raw = e.target.value.replace(/[^\d]/g, ''); // solo números
-        const formatted = new Intl.NumberFormat('es-ES').format(raw); // formato español
-        setFormattedPrice(raw ? `${formatted} €` : '');
-    };
-
     const handleSubmit = (event) => {
         event.preventDefault();
         if (formRef.current && formRef.current.checkValidity()) {
-            const inf = postData.height;
             updatePostData({
-                formattedPrice,
-                description,
-                urls
+                urlsPanoramic,
+                hotspots,
             });
             goToUploadContactInformation();
         }
-    }
+    };
+
     const goToUploadContactInformation = () => {
-        navigate('/listings/new/upload3DTour');
+        navigate('/listings/new/uploadDataDetails');
     };
 
     return (
-    <div>
-        <button className="back-button" onClick={() => navigate(-1)}>
-            ⮌ <FormattedMessage id="project.app.button.back" defaultMessage={intl.formatMessage({ id: "project.app.back" })} />
-        </button>
+        <div>
+            <button className="back-button" onClick={() => navigate(-1)}>
+                ⮌ <FormattedMessage id="project.app.button.back" defaultMessage={intl.formatMessage({ id: "project.app.back" })} />
+            </button>
             <div className="publish-page">
                 <div className="publish-card">
                     <div>
@@ -102,32 +105,11 @@ const UploadData = ({ onUploadComplete }) => {
                             <FormattedMessage id="project.publish.post.upload.price"/>
                         </h2>
 
-                        <Errors errors={backendErrors} onClose={() => setBackendErrors(null)}/>
+                        <Errors errors={backendErrors} onClose={() => setBackendErrors(null)} />
 
-                        <form
-                            ref={formRef}
-                            onSubmit={(e) => handleSubmit(e)}
-                        >
-                            <input type="price" name="price" id="price" className="input-field-price" value={formattedPrice} onChange={handlePriceChange} required/>
-                            <br></br><br></br><br></br>
-
+                        <form ref={formRef} onSubmit={handleSubmit}>
                             <h2 className="publish-title">
-                                <FormattedMessage id="project.publish.post.upload.description"/>
-                            </h2>
-
-                            <textarea
-                                id="description"
-                                name="description"
-                                className="input-field"
-                                rows="10"
-                                placeholder={intl.formatMessage({ id: "project.publish.post.upload.description.text" })}
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                            />
-
-                            <br></br><br></br><br></br>
-                            <h2 className="publish-title">
-                                <FormattedMessage id="project.publish.post.upload.images"/>
+                                <FormattedMessage id="project.publish.post.upload.images.panoramic"/>
                             </h2>
 
                             <div
@@ -144,23 +126,37 @@ const UploadData = ({ onUploadComplete }) => {
                                 <FormattedMessage id="project.publish.post.upload.images.text"/>
                                 <br></br>
                                 <br></br>
-                                <input type="file" accept="image/*" multiple onChange={handleFileChange} required/>
+                                <input type="file" accept="image/*" multiple onChange={handleFileChange} required />
                             </div>
 
-                            {loading && <p><FormattedMessage id="project.publish.post.upload.images.uploading"/></p>}
+                            {loading && <p><FormattedMessage id="project.publish.post.upload.images.uploading" /></p>}
                             {errors && <p style={{ color: 'red' }}>Error: {errors}</p>}
-
-                            <br></br><br></br>
 
                             <button className="continue-button" disabled={loading}>
                                 <FormattedMessage id="project.app.login.form.continue"/>
                             </button>
+
                         </form>
                     </div>
                 </div>
             </div>
-    </div>
+
+            {urlsPanoramic.length > 0 && (
+                <div style={{ marginTop: '40px', marginLeft: '20px', textAlign: 'center' }}>
+                    <h3 style={{ textAlign: 'center' }}>
+                        <FormattedMessage
+                            id="project.preview.title"
+                            defaultMessage="Previsualización del tour virtual"
+                        />
+                    </h3>
+                    <MarzipanoTour panoramas={urlsPanoramic} hotspots={hotspots} />
+                </div>
+            )}
+
+            <br /><br />
+
+        </div>
     );
 };
 
-export default UploadData;
+export default Upload3DTour;

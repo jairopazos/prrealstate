@@ -92,5 +92,5 @@ public class PostsServiceImpl implements PostsService{
             e.printStackTrace();
             throw new RuntimeException("Error al enviar correo HTML", e);
         }
-    }
+     }
 }

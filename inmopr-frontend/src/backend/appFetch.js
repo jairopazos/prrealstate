@@ -2,14 +2,11 @@
  * Copyright (c) 2025 inmopr
  * Licensed under the MIT License. See LICENSE file in the project root for full license information.
  */
-
-
 import NetworkError from './NetworkError';
-
-const SERVICE_TOKEN_NAME = 'serviceToken';
 
 let networkErrorCallback;
 let reauthenticationCallback;
+const SERVICE_TOKEN_NAME = 'serviceToken';
 
 const isJson = response => {
 
@@ -34,11 +31,10 @@ const handleOkResponse = (response, onSuccess) => {
         return true;
     }
 
-    // Si no es JSON, tratamos la respuesta como texto
+    // If response is not in JSON format, consider response as text
     if (!isJson(response)) {
         response.text().then(payload => {
-            console.log('Text response:', payload);  // Debugging line
-            onSuccess(payload);  // Llamamos a onSuccess con el texto
+            onSuccess(payload);
         });
         return true;
     }

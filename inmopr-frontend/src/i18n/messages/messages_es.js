@@ -74,4 +74,7 @@ export default {
     'project.post.status.new': 'Obra nueva',
     'project.post.status.good': 'Buen estado',
     'project.post.status.reform': 'A reformar',
+    'project.publish.post.upload.images.panoramic': 'Subir imagenes panóramicas',
+    'project.preview.title' : 'Previsualización Tour virtual',
+    'project.app.button.back' : 'Atrás'
 }

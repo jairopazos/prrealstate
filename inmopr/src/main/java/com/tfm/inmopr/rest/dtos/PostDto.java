@@ -5,7 +5,9 @@
 
 package com.tfm.inmopr.rest.dtos;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+// ELIMINA ESTA LÍNEA si ya no usas @JsonIgnore en ninguna otra propiedad de esta clase.
+// import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty; // ¡ASEGÚRATE DE QUE ESTA IMPORTACIÓN ESTÉ PRESENTE!
 import com.tfm.inmopr.model.entities.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -26,8 +28,13 @@ public class PostDto {
     private String telephone;
     private LocalDateTime creationDate;
     private LocalDateTime modificationDate;
-    @JsonIgnore
+
+    // >>>>>>>>>> INICIO DE LA MODIFICACIÓN <<<<<<<<<<<<
+    // ELIMINADA: @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY) // AÑADIDA esta anotación
     private Address address;
+    // >>>>>>>>>> FIN DE LA MODIFICACIÓN <<<<<<<<<<<<
+
     private Boolean ascensor;
     private Boolean garaje;
     private String metrosConstruidos;
@@ -45,6 +52,7 @@ public class PostDto {
     private Estado estado;
     private String precio;
     private String email;
+    private List<String> urlsPanoramic;
 
     public PostDto() {}
 
@@ -52,7 +60,7 @@ public class PostDto {
                    List<String> urls, String ownerName, String telephone, LocalDateTime creationDate, LocalDateTime modificationDate,
                    Address address, Boolean ascensor, Boolean garaje, String metrosConstruidos, String metrosUtiles, String numHabitaciones, String numBanos,
                    Boolean exterior, Orientacion orientacion, Boolean amueblado, Boolean trastero, Boolean jardin, Boolean terraza,
-                   Boolean calefaccion, Boolean piscina, Estado estado, String precio, String email) {
+                   Boolean calefaccion, Boolean piscina, Estado estado, String precio, String email, List<String> urlsPanoramic) {
         this.id = id;
         this.name = name;
         this.tipoAnuncio = tipoAnuncio;
@@ -81,13 +89,14 @@ public class PostDto {
         this.estado = estado;
         this.precio = precio;
         this.email = email;
+        this.urlsPanoramic = urlsPanoramic;
     }
 
     public PostDto(String name, TipoAnuncio tipoAnuncio, TipoVivienda tipoVivienda, String description,
                    List<String> urls, String ownerName, String telephone, LocalDateTime creationDate, LocalDateTime modificationDate,
                    Address address, Boolean ascensor, Boolean garaje, String metrosConstruidos, String metrosUtiles, String numHabitaciones, String numBanos,
                    Boolean exterior, Orientacion orientacion, Boolean amueblado, Boolean trastero, Boolean jardin, Boolean terraza,
-                   Boolean calefaccion, Boolean piscina, Estado estado, String precio, String email) {
+                   Boolean calefaccion, Boolean piscina, Estado estado, String precio, String email, List<String> urlsPanoramic) {
         this.name = name;
         this.tipoAnuncio = tipoAnuncio;
         this.tipoVivienda = tipoVivienda;
@@ -115,10 +124,11 @@ public class PostDto {
         this.estado = estado;
         this.precio = precio;
         this.email = email;
+        this.urlsPanoramic = urlsPanoramic;
     }
 
     public PostDto(Long id, TipoAnuncio tipoAnuncio, TipoVivienda tipoVivienda, String description, List<String> urls,
-                   String ownerName, String telephone, Address address, String precio, String email) {
+                   String ownerName, String telephone, Address address, String precio, String email, List<String> urlsPanoramic) {
         this.id = id;
         this.tipoAnuncio = tipoAnuncio;
         this.tipoVivienda = tipoVivienda;
@@ -129,6 +139,7 @@ public class PostDto {
         this.address = address;
         this.precio = precio;
         this.email = email;
+        this.urlsPanoramic = urlsPanoramic;
     }
 
     public Long getId() {
@@ -225,6 +236,9 @@ public class PostDto {
     }
 
     @NotNull(groups={UserDto.AllValidations.class, UserDto.UpdateValidations.class})
+    // Nota: Si 'Address' es un objeto complejo (y no un String),
+    // la anotación @Size aquí no es aplicable y debería eliminarse.
+    // Las validaciones de los campos de la dirección deben ir dentro de la clase 'Address'.
     @Size(min=1, max=500, groups={UserDto.AllValidations.class, UserDto.UpdateValidations.class})
     public Address getAddress() {
         return address;
@@ -379,5 +393,14 @@ public class PostDto {
 
     public void setEmail(String email) {
         this.email = email.trim();
+    }
+
+    @NotNull(groups={UserDto.AllValidations.class, UserDto.UpdateValidations.class})
+    public List<String> getUrlsPanoramic() {
+        return urlsPanoramic;
+    }
+
+    public void setUrlsPanoramic(List<String> urlsPanoramic) {
+        this.urlsPanoramic = urlsPanoramic;
     }
 }
