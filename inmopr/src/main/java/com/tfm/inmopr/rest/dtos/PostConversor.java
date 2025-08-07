@@ -18,7 +18,7 @@ public class PostConversor {
             postDto.getAscensor(), postDto.getGaraje(), postDto.getMetrosConstruidos(), postDto.getMetrosUtiles(),
             postDto.getNumHabitaciones(), postDto.getNumBanos(), postDto.getExterior(), Orientacion.valueOf(postDto.getOrientacion().name()), postDto.getAmueblado(), postDto.getTrastero(),
             postDto.getJardin(), postDto.getTerraza(), postDto.getCalefaccion(), postDto.getPiscina(), Estado.valueOf(postDto.getEstado().name()),
-            new BigDecimal(postDto.getPrecio().replace("€", "").replace(".", "").trim()), postDto.getEmail());
+            new BigDecimal(postDto.getPrecio().replace("€", "").replace(".", "").trim()), postDto.getEmail(), postDto.getUrlsPanoramic());
     }
 
     public final static PostDto toPostDto(Post post) {
@@ -27,7 +27,7 @@ public class PostConversor {
             post.getAddress(), post.getAscensor(), post.getGaraje(), post.getMetrosConstruidos(), post.getMetrosUtiles(),
             post.getNumHabitaciones(), post.getNumBanos(), post.getExterior(), Orientacion.valueOf(post.getOrientacion().name()),
             post.getAmueblado(), post.getTrastero(), post.getJardin(), post.getTerraza(), post.getCalefaccion(),
-            post.getPiscina(), Estado.valueOf(post.getEstado().name()), post.getPrecio().toString(), post.getEmail());
+            post.getPiscina(), Estado.valueOf(post.getEstado().name()), post.getPrecio().toString(), post.getEmail(), post.getUrlsPanoramic());
     }
 
 }

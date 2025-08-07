@@ -58,7 +58,9 @@ const UploadData = ({ onUploadComplete }) => {
                     piscina: postData.piscina,
                     estado: postData.estado,
                     precio: postData.formattedPrice,
-                    email: email
+                    email: email,
+                    urlsPanoramic: postData.urlsPanoramic,
+                    hotspots: postData.hotspots
                 },
                     () => setSuccessMessage(intl.formatMessage({
                         id: "project.publish.success",

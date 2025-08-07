@@ -47,6 +47,7 @@ public class Post {
     private Estado estado;
     private BigDecimal precio;
     private String email;
+    private List<String> urlsPanoramic;
 
     public Post() {}
 
@@ -54,7 +55,7 @@ public class Post {
                 String ownerName, String telephone, LocalDateTime creationDate, LocalDateTime modificationDate, Address address,
                 Boolean ascensor, Boolean garaje, String metrosConstruidos, String metrosUtiles, String numHabitaciones, String numBanos,
                 Boolean exterior, Orientacion orientacion, Boolean amueblado, Boolean trastero, Boolean jardin, Boolean terraza,
-                Boolean calefaccion, Boolean piscina, Estado estado, BigDecimal precio, String email) {
+                Boolean calefaccion, Boolean piscina, Estado estado, BigDecimal precio, String email, List<String> urlsPanoramic) {
         this.name = name;
         this.tipoAnuncio = tipoAnuncio;
         this.tipoVivienda = tipoVivienda;
@@ -82,12 +83,13 @@ public class Post {
         this.estado = estado;
         this.precio = precio;
         this.email = email;
+        this.urlsPanoramic = urlsPanoramic;
     }
 
     public Post(TipoAnuncio tipoAnuncio, TipoVivienda tipoVivienda, String description, List<String> urls, String ownerName,
                 String telephone, Address address, Boolean ascensor, Boolean garaje, String metrosConstruidos, String metrosUtiles, String numHabitaciones, String numBanos,
                 Boolean exterior, Orientacion orientacion, Boolean amueblado, Boolean trastero, Boolean jardin, Boolean terraza,
-                Boolean calefaccion, Boolean piscina, Estado estado, BigDecimal precio, String email) {
+                Boolean calefaccion, Boolean piscina, Estado estado, BigDecimal precio, String email, List<String> urlsPanoramic) {
         this.tipoAnuncio = tipoAnuncio;
         this.tipoVivienda = tipoVivienda;
         this.description = description;
@@ -112,6 +114,7 @@ public class Post {
         this.estado = estado;
         this.precio = precio;
         this.email = email;
+        this.urlsPanoramic = urlsPanoramic;
     }
 
     @Id
@@ -352,5 +355,15 @@ public class Post {
 
     public void setEmail(String email) {
         this.email = email.trim();
+    }
+
+    @Convert(converter = ListToStringConverter.class)
+    @Column(columnDefinition = "TEXT", nullable = false)
+    public List<String> getUrlsPanoramic() {
+        return urlsPanoramic;
+    }
+
+    public void setUrlsPanoramic(List<String> urlsPanoramic) {
+        this.urlsPanoramic = urlsPanoramic;
     }
 }

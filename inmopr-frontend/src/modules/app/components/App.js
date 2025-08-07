@@ -18,6 +18,7 @@ import ListingsPage from "../../posts/components/ListingsPage";
 import UploadDataDetails from "../../posts/components/UploadDataDetails";
 import ListingsMap from "../../posts/components/ListingsMap";
 import ListingDetails from "../../posts/components/ListingDetails";
+import Upload3DTour from "../../posts/components/Upload3DTour";
 
 
 const AppContent = () => {
@@ -36,6 +37,7 @@ const AppContent = () => {
                 <Route path="listings/new" element={<PublishPost />} />
                 <Route path="listings/new/uploadData" element={<UploadData />} />
                 <Route path="listings/new/uploadDataDetails" element={<UploadDataDetails />} />
+                <Route path="listings/new/upload3DTour" element={<Upload3DTour />} />
                 <Route path="listings/new/uploadContactInformation" element={<UploadContactInformation />} />
                 <Route path="listings/map" element={<ListingsMap />} />
                 <Route path="listing/details/:id" element={<ListingDetails />} />

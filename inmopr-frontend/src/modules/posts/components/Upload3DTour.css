@@ -1,0 +1,41 @@
+/* UploadData.css o general */
+.hotspot {
+    box-shadow: 0 0 10px #000;
+    transition: transform 0.2s;
+}
+
+.hotspot:hover {
+    transform: scale(1.2);
+}
+
+.marzipano-container {
+    position: relative;
+    width: 400px;
+    height: 250px;
+    margin: 40px auto;
+    border: 1px solid #ccc;
+    overflow: hidden;
+}
+
+.marzipano-container canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.hotspot {
+    width: 25px;
+    height: 25px;
+    background-color: red;
+    border-radius: 50%;
+    cursor: pointer;
+    position: absolute;
+    top: -12px;
+    left: -12px;
+    transform: translate(-50%, -50%); /* Para centrar el hotspot en el punto */
+}
+
+
+
