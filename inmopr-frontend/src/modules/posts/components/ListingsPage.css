@@ -234,3 +234,8 @@
     font-family: 'Merriweather', serif;
     margin-top: 5px;
 }
+
+h1, h2, h3 {
+    text-decoration: none !important;
+    color: #bfa980 !important;
+}

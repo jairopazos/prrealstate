@@ -30,7 +30,7 @@ const ListingCard = ({ listing, onClick }) => {
                 )}
             </div>
             <h3>{listing.name}</h3>
-            <h3>{listing.precio.toLocaleString('es-ES')} €</h3>
+            <h3>{parseFloat(listing.precio).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €</h3>
             <p className="listing-description">{listing.description}</p>
         </div>
     );

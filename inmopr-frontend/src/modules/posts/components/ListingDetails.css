@@ -39,7 +39,7 @@
 }
 
 .image-container {
-    width: 80vh;
+    width: 100vh;
     height: 70vh;
     background-color: #fff;       /* PASAMOS de gris a blanco */
     border: 1px solid #fff;       /* opcional: borde blanco para recortar el área */
@@ -74,9 +74,11 @@
     margin-left: 20px;
     margin-bottom: 0px;
     margin-top: 0px;
-    font-size: 30px;
     color: #bfa980;
-    font-weight: 900;
+    font-family: 'Cormorant Garamond', serif; /* Elegante y sofisticado */
+    font-size: 1.6rem; /* Tamaño grande para impacto */
+    text-transform: uppercase;
+    font-weight: bold; /* Mayor presencia */
 }
 
 .details-wrapper {
@@ -203,15 +205,17 @@
     flex-wrap: wrap;
     gap: 12px;
     margin-top: 8px;
+    justify-content: center;
 }
 
 .features-list label {
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 14px;
+    font-size: 16px;
     color: #444;
 }
+
 
 .features-list input[type="checkbox"] {
     width: 16px;
@@ -239,4 +243,32 @@
     transition: background-color 0.3s ease;
     background-color: #bfa980;
     color: white;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cormorant Garamond', serif; /* Fuente elegante */
+    color: #bfa980; /* Tu color dorado */
+    font-size: 1.8rem; /* Un tamaño elegante y visible para h3s */
+    font-weight: bold; /* Negrita */
+    text-transform: uppercase; /* Mayúsculas */
+    letter-spacing: 4px; /* Espaciado sutil para elegancia */
+    margin-top: 25px; /* Margen superior para separarlo del contenido de arriba */
+    margin-bottom: 10px; /* Margen inferior para separarlo del texto que le sigue */
+    margin-left: 20px; /* Mantén este si todos tus h3 necesitan esta sangría */
+    text-decoration: underline;
+}
+
+.property-name, .property-precio-titulo {
+    font-size: 2.5rem;
+    text-decoration: none;
+    letter-spacing: 0px;
+    margin-top: 0px;
+}
+
+.datos-anunciante {
+    color: #bfa980 !important;
+    text-decoration: none;
+    text-align: center;
+    font-size: 1.4rem !important;
+    font-weight: bold;
 }

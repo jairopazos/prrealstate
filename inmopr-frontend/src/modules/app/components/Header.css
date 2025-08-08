@@ -4,6 +4,19 @@
  */
 
 /* General */
+
+/* Definición de la animación de aparecer y escalar */
+@keyframes fadeInScaleUp {
+    from {
+        opacity: 0.1; /* Empieza completamente transparente */
+        transform: translateY(20px) scale(0.98); /* Empieza 20px más abajo y ligeramente más pequeño */
+    }
+    to {
+        opacity: 1; /* Termina completamente opaco */
+        transform: translateY(0) scale(1); /* Vuelve a su posición y tamaño original */
+    }
+}
+
 .header {
     background-color: white; /* Fondo limpio y minimalista */
     padding: 10px 0; /* Reducir el padding superior e inferior */
@@ -53,16 +66,70 @@
 .nav-right .login-link {
     color: #bfa980;
     text-decoration: none;  /* Eliminar subrayado */
-    font-size: 1.1rem;
+    font-family: 'Cormorant Garamond', serif; /* Elegante y sofisticado */
+    animation: fadeInScaleUp 0.8s ease-out forwards;
+    font-size: 1.2rem; /* Tamaño grande para impacto */
+    text-transform: uppercase;
+    font-weight: bold; /* Mayor presencia */
+
+    position: relative; /* Necesario para que el pseudo-elemento ::after se posicione correctamente */
+    overflow: hidden; /* Para ocultar la línea que se desliza */
+    transition: color 0.3s ease, transform 0.2s ease-out;
+    transform: translateY(0) scale(1); /* Coincide con el final de fadeInScaleUp */
 }
 
 /* Estilo para el enlace "Mi cuenta" */
 .nav-right .publish-link {
+    font-family: 'Cormorant Garamond', serif; /* Elegante y sofisticado */
+    animation: fadeInScaleUp 0.8s ease-out forwards;
+    font-size: 1.2rem; /* Tamaño grande para impacto */
+    font-weight: bold; /* Mayor presencia */
     color: #bfa980;
-    margin-right: 1rem;
+    margin-right: 2rem;
     text-decoration: none;  /* Eliminar subrayado */
-    font-size: 1.1rem;
+
+    position: relative; /* Necesario para que el pseudo-elemento ::after se posicione correctamente */
+    overflow: hidden; /* Para ocultar la línea que se desliza */
+    transition: color 0.3s ease, transform 0.2s ease-out;
+    transform: translateY(0) scale(1); /* Coincide con el final de fadeInScaleUp */
 }
+
+/* Pseudo-elemento para la línea deslizante en .nav-right links */
+.nav-right .login-link::after,
+.nav-right .publish-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0; /* Posiciona la línea en la parte inferior del texto */
+    left: 0;
+    width: 100%;
+    height: 2px; /* Grosor de la línea */
+    /* --- CAMBIO: Color del subrayado a ORO (#bfa980) --- */
+    background-color: #bfa980; /* Color oro para el subrayado */
+    transform: translateX(-100%); /* Inicialmente fuera de la vista a la izquierda */
+    transition: transform 0.3s ease-out; /* Animación de deslizamiento suave */
+}
+
+/* Efecto hover para .nav-right links */
+.nav-right .login-link:hover,
+.nav-right .publish-link:hover {
+    /* El color del texto no cambia, solo el subrayado se mueve */
+    transform: translateY(-3px); /* Se levanta ligeramente al pasar el ratón */
+}
+
+/* La línea se desliza al pasar el ratón */
+.nav-right .login-link:hover::after,
+.nav-right .publish-link:hover::after {
+    transform: translateX(0%); /* La línea se desliza a su posición */
+}
+
+/* Efecto active (clic) para .nav-right links */
+.nav-right .login-link:active,
+.nav-right .publish-link:active {
+    transform: scale(0.97); /* Ligeramente más pequeño para la "pulsación" */
+    color: #a08c6e; /* Un tono más oscuro de dorado para el feedback de clic */
+    transition: transform 0.1s ease-in, color 0.1s ease-in; /* Retroalimentación rápida */
+}
+
 
 /* Título principal */
 .title {
@@ -92,12 +159,18 @@
     cursor: pointer;
     height: 21px;
     justify-content: space-between;
+    /* --- CAMBIO: REMOVIDO el background-color y padding del hamburger para dejar solo las rayas --- */
+    /* background-color: #bfa980; */
+    /* padding: 5px; */
+    border-radius: 3px;
+    z-index: 101; /* Asegura que esté por encima del menú desplegable */
 }
 
 .hamburger .bar {
     width: 30px;
     height: 3px;
-    background-color: #fff; /* Color blanco para las barras */
+    /* --- CAMBIO: Color de las barras a ORO (#bfa980) --- */
+    background-color: #bfa980; /* Rayas color oro */
     transition: 0.3s;
 }
 
@@ -117,14 +190,12 @@
     top: -7px;
 }
 
-/* ... (otros estilos) ... */
-
 /* Menú de navegación */
 .menu {
     display: none;
     position: absolute;
     top: 60px; /* Ajusta la posición vertical según la altura del header */
-    right: 0; /* Alinea con el borde izquierdo de la pantalla */
+    right: 0; /* Alinea con el borde derecho de la pantalla */
     background-color: #fff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
@@ -138,8 +209,10 @@
 
 .menu.open {
     display: block;
-    top: 90%;
-    max-width: 30%;
+    top: 60px; /* Asegura que se abra justo debajo del header */
+    width: 100%; /* Ocupa todo el ancho en pantallas pequeñas */
+    max-width: 100%; /* Asegura que no esté limitado a 30% */
+    left: 0; /* Asegura que se extienda de borde a borde */
 }
 
 .menu ul {
@@ -156,12 +229,86 @@
     color: #bfa980;
     text-decoration: none;
     font-size: 1rem;
+    position: relative; /* Necesario para el pseudo-elemento ::after */
+    overflow: hidden; /* Para ocultar la línea que se desliza */
+    transition: color 0.3s ease, transform 0.2s ease-out;
+    transform: translateY(0) scale(1); /* Coincide con el final de fadeInScaleUp */
+}
+
+/* Pseudo-elemento para la línea deslizante en .menu li a */
+.menu li a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px; /* Un poco más delgado para los elementos del menú */
+    background-color: #bfa980; /* El mismo color dorado para la línea */
+    transform: translateX(-100%); /* Inicialmente fuera de la vista a la izquierda */
+    transition: transform 0.3s ease-out; /* Animación de deslizamiento suave */
+}
+
+/* --- CAMBIO: OCULTAR SUBRAYADO CUANDO EL MENÚ ESTÁ ABIERTO --- */
+.menu.open li a::after {
+    display: none; /* Elimina el subrayado completamente cuando el menú está abierto */
+}
+
+
+/* Efecto hover para .menu li a */
+.menu li a:hover {
+    /* El color del texto no cambia, solo el subrayado se mueve */
+    transform: translateY(-3px); /* Se levanta ligeramente al pasar el ratón */
+}
+
+/* La línea se desliza al pasar el ratón en el menú */
+.menu li a:hover::after {
+    transform: translateX(0%); /* La línea se desliza a su posición */
+}
+
+/* Efecto active (clic) para .menu li a */
+.menu li a:active {
+    transform: scale(0.97); /* Ligeramente más pequeño para la "pulsación" */
+    color: #8c785d; /* Un tono aún más oscuro para el feedback de clic */
+    transition: transform 0.1s ease-in, color 0.1s ease-in; /* Retroalimentación rápida */
 }
 
 /* Ajustes responsivos */
-@media (max-width: 768px) {
+@media (min-width: 1261px) {
+    .login-link {
+        font-family: 'Cormorant Garamond', serif; /* Elegante y sofisticado */
+        animation: fadeInScaleUp 0.8s ease-out forwards;
+        font-size: 1.9rem; /* Tamaño grande para impacto */
+    }
+
+    .publish-link {
+        text-transform: uppercase; /* Sensación de exclusividad */
+    }
+
+    .hamburger {
+        display: none;
+    }
+
+    .menu {
+        width: 100%; /* Ocupa todo el ancho en pantallas pequeñas */
+    }
+
+    .luxury-title {
+        font-size: 4rem;
+        text-decoration: none;
+    }
+}
+
+@media (max-width: 1260px) {
+    .luxury-title {
+        font-size: 1.8rem; /* Más pequeño aún, para que quepa en una línea sí o sí */
+        text-decoration: none;
+    }
+
     .login-link {
         display: none;
+        font-family: 'Cormorant Garamond', serif; /* Elegante y sofisticado */
+        animation: fadeInScaleUp 0.8s ease-out forwards;
+        font-size: 1.9rem; /* Tamaño grande para impacto */
     }
 
     .publish-link {
@@ -170,57 +317,23 @@
 
     .hamburger {
         display: flex;
+        /* --- CAMBIO: REMOVIDO "color" de aquí, ya que no aplica al flex container y el color de las barras ya se maneja --- */
     }
 
     .menu {
         width: 100%; /* Ocupa todo el ancho en pantallas pequeñas */
     }
 
-    .title {
-        font-size: 2rem;
-    }
-}
-
-/* Ajustes responsivos */
-@media (max-width: 768px) {
-    .login-link {
-        text-decoration: none; /* Eliminar subrayado */
-        display: none;
-    }
-
-    .publish-link {
-        text-decoration: none; /* Eliminar subrayado */
-        display: none;
-    }
-
-    .hamburger {
-        display: flex; /* Mostrar menú hamburguesa */
-    }
-
-    .menu {
-        width: 100%; /* Ocupa todo el ancho en pantallas pequeñas */
-    }
-
-    /* Reducir tamaño del título en pantallas pequeñas */
-    .title {
-        font-size: 2rem; /* Reducir tamaño del título */
-    }
-}
-
-@media (max-width: 480px) {
-    /* Reducir aún más el título en pantallas muy pequeñas */
-    .title {
-        font-size: 1.5rem; /* Más pequeño aún */
-    }
 }
 
 .luxury-title {
-    font-family: 'Playfair Display', serif; /* Elegante y sofisticado */
-    font-size: 3rem; /* Tamaño grande para impacto */
+    font-family: 'Cormorant Garamond', serif; /* Elegante y sofisticado */
+    animation: fadeInScaleUp 0.6s ease-out forwards;
     font-weight: bold; /* Mayor presencia */
-    letter-spacing: 2px; /* Espaciado para un look más premium */
+    letter-spacing: 8px; /* Espaciado para un look más premium */
     text-transform: uppercase; /* Sensación de exclusividad */
     color: #bfa980; /* Dorado o tonos beige/dorados */
     text-align: center; /* Centrar el título */
     margin: 20px 0; /* Espaciado adecuado */
+    text-decoration: none;
 }

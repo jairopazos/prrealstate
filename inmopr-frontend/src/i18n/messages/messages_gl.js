@@ -39,7 +39,7 @@ export default {
     'project.app.login.form.input.password.repeat': 'Reintroduce a túa contraseña',
 
     // Búsqueda de propiedades && Información
-    'project.app.text.city': 'Donde queres buscar?',
+    'project.app.text.city': 'Donde queres buscar? Introduce a cidade',
     'project.app.href.publishpost': 'Publicar anuncio',
     'project.publish.post.H1.title': 'Qué queres publicar?',
     'project.publish.post.list': 'Vender',

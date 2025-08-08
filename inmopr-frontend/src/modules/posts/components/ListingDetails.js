@@ -114,7 +114,9 @@ const ListingDetails = () => {
 
                 <div className="left-panel">
                     <h1 className="property-name">{property.name}</h1>
-                    <h2 className="property-precio">{property.precio.toLocaleString('es-ES')} €</h2>
+                    <h2 className="property-precio-titulo">
+                        {parseFloat(property.precio).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €
+                    </h2>
 
                     {/* Botones de alternancia entre fotos y tour 360 */}
                     <div className="view-toggle-buttons" style={{ marginBottom: '15px', textAlign: 'center' }}>
@@ -180,29 +182,29 @@ const ListingDetails = () => {
                         )
                     )}
 
-
+                    <br></br><br></br><br></br>
                     <h3 className="property-precio">Comentario del anunciante</h3>
                     <p className={"property-description"}>{property.description}</p>
-
+                    <br></br><br></br>
                     <h3 className="property-precio">Características</h3>
-                    <p className="caracteristicas-p">Metros construidos: {property.metrosConstruidos}</p>
-                    <p className="property-precio-p">Metros útiles: {property.metrosUtiles}</p>
-                    <p className="property-precio-p">Número de habitaciones: {property.numHabitaciones}</p>
-                    <p className="property-precio-p">Número de baños: {property.numBanos}</p>
-                    <p className="property-precio-p">Estado: {property.estado}</p>
-                    <p className="property-precio-p">Orientación: {property.orientacion}</p>
+                    <p className="caracteristicas-p">Metros construidos:  {property.metrosConstruidos}📏</p>
+                    <p className="property-precio-p">Metros útiles:  {property.metrosUtiles}📐</p>
+                    <p className="property-precio-p">Número de habitaciones:  {property.numHabitaciones}🛌</p>
+                    <p className="property-precio-p">Número de baños:  {property.numBanos}🛀</p>
+                    <p className="property-precio-p">Estado:  {property.estado}⭐</p>
+                    <p className="property-precio-p">Orientación:  {property.orientacion}📍</p>
 
                     <div className="features-list">
                         {[
-                            { label: 'Ascensor', key: 'ascensor' },
-                            { label: 'Garaje', key: 'garaje' },
-                            { label: 'Trastero', key: 'trastero' },
-                            { label: 'Calefacción', key: 'calefaccion' },
-                            { label: 'Jardín', key: 'jardin' },
-                            { label: 'Piscina', key: 'piscina' },
-                            { label: 'Exterior', key: 'exterior' },
-                            { label: 'Terraza', key: 'terraza' },
-                            { label: 'Amueblado', key: 'amueblado' }
+                            { label: '🛗 Ascensor', key: 'ascensor' },
+                            { label: '🅿️ Garaje', key: 'garaje' },
+                            { label: '📦 Trastero', key: 'trastero' },
+                            { label: '🌡️ Calefacción', key: 'calefaccion' },
+                            { label: '🌳 Jardín', key: 'jardin' },
+                            { label: '🏊 Piscina', key: 'piscina' },
+                            { label: '☀️ Exterior', key: 'exterior' },
+                            { label: '⛱️ Terraza', key: 'terraza' },
+                            { label: '🛋️ Amueblado', key: 'amueblado' }
                         ].map(feature => (
                             <label key={feature.key}>
                                 <input type="checkbox" checked={property[feature.key]} disabled />
@@ -210,15 +212,15 @@ const ListingDetails = () => {
                             </label>
                         ))}
                     </div>
-
+                    <br></br><br></br>
                     <h3 className="property-precio">Precio</h3>
-                    <p className="property-precio-p">Precio de la propiedad: {property.precio.toLocaleString('es-ES')} €</p>
-                    <p className="property-precio-p">Precio por metro cuadrado: {calcularPrecioPorMetro(parseFloat(property.precio.replace('.', '').replace(',', '.')), property.metrosConstruidos)} €/m²</p> {/* Corregido el parsing del precio */}
+                    <p className="property-precio-p">Precio de la propiedad 💶: {parseFloat(property.precio).toFixed(0)}€</p>
+                    <p className="property-precio-p">Precio por metro cuadrado 💶/📏 : {calcularPrecioPorMetro(parseFloat(property.precio.replace('.', '').replace(',', '.')), property.metrosConstruidos)} €/m²</p> {/* Corregido el parsing del precio */}
                 </div>
 
                 <div className="right-panel">
                     <div className="agent-card">
-                        <h3>Datos del anunciante</h3>
+                        <h3 className="datos-anunciante">Datos del anunciante</h3>
                         <p><strong>Nombre:</strong> {property.ownerName || 'No disponible'}</p>
                         <p><strong>Teléfono:</strong> {property.telephone || 'No disponible'}</p>
                         <p><strong>Publicado en:</strong> {creationDateFormatted}</p>

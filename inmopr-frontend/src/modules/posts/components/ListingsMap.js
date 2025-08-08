@@ -130,13 +130,13 @@ const MapView = () => {
                         <Marker
                             key={property.id}
                             position={{ lat: property.lat, lng: property.lng }}
-                            onClick={() => navigate('/listing/details', { state: { property } })}
+                            onClick={() => navigate(`/listing/details/${property.id}`)}
                             icon={{
                                 url: "http://maps.google.com/mapfiles/ms/icons/transparent.png",
                                 labelOrigin: new window.google.maps.Point(15, 10),
                             }}
                             label={{
-                                text: `${property.precio?.toLocaleString('es-ES', { style: 'currency', currency: 'EUR' }) || ''}`,
+                                text: `${parseFloat(property.precio).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €`,
                                 color: '#ffffff',
                                 fontSize: '14px',
                                 fontWeight: 'bold',

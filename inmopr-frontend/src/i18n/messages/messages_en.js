@@ -39,7 +39,7 @@ export default {
     'project.app.login.form.input.password.repeat': 'Repeat your password',
 
     // Listing search && Information
-    'project.app.text.city': 'Where do you want to search?',
+    'project.app.text.city': 'Where do you want to search? Insert the city',
     'project.app.href.publishpost': 'Publish post',
     'project.publish.post.H1.title': 'What do you want to post?',
     'project.publish.post.list': 'List it',

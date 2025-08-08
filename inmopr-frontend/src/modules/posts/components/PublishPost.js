@@ -230,7 +230,7 @@ const PublishPost = () => {
                         <FormattedMessage id="project.publish.post.province" />
                             </label>
                             <div className="input-wrapper">
-                                <input type="text" name="province" id="province" className="input-wrapper" value={searchTermProvince}
+                                <input type="text" name="province" id="province" className="input-field" value={searchTermProvince}
                                        onChange={handleChangeProvince} required/>
                                 {suggestionsProvince.length > 0 && (
                                     <ul className="suggestions-dropdown">
