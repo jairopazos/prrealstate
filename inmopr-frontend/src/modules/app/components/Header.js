@@ -35,10 +35,10 @@ const Header = () => {
 
                 <div className="nav-right">
                     {!isOnPostPage && (
-                    <a href="/listings/new" className="publish-link">
-                        {userName &&
-                            <FormattedMessage id="project.app.href.publishpost"/>}
-                    </a>)}
+                        <a href="/listings/new" className="publish-link">
+                            {userName &&
+                                <FormattedMessage id="project.app.href.publishpost"/>}
+                        </a>)}
 
                     <div className="dropdown">
                         <a href={userName ? "/users/details" : "/users/login"} className="login-link">
@@ -64,16 +64,44 @@ const Header = () => {
 
             <nav className={`menu ${menuOpen ? 'open' : ''}`}>
                 <ul>
-                    <li>
-                        <a href="/users/login">
-                            <FormattedMessage id="project.app.href.micuenta"/>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/listings/new">
-                            <FormattedMessage id="project.app.href.publishpost"/>
-                        </a>
-                    </li>
+                    {/* Renderiza las opciones del menú de hamburguesa basadas en el estado del usuario */}
+                    {userName ? (
+                        <>
+                            <li>
+                                <a href="/listings/new">
+                                    <FormattedMessage id="project.app.href.publishpost"/>
+                                </a>
+                            </li>
+                            <li>
+                                <a href={`/listings/user/${userId}`}>
+                                    Ver mis anuncios publicados
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/users/details">
+                                    {userName}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/users/logout">
+                                    Cerrar sesión
+                                </a>
+                            </li>
+                        </>
+                    ) : (
+                        <>
+                            <li>
+                                <a href="/users/login">
+                                    <FormattedMessage id="project.app.href.micuenta"/>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/listings/new">
+                                    <FormattedMessage id="project.app.href.publishpost"/>
+                                </a>
+                            </li>
+                        </>
+                    )}
                 </ul>
             </nav>
         </header>
