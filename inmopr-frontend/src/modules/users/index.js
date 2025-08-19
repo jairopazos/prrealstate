@@ -10,5 +10,6 @@ import * as selectors from './selectors';
 
 export {default as Login} from './components/Login';
 export {default as SignUp} from './components/Register';
+export {default as Logout} from './components/Logout'
 
 export default {actions, actionTypes, reducer, selectors};

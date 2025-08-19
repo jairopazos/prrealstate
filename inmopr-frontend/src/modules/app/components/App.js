@@ -19,6 +19,7 @@ import UploadDataDetails from "../../posts/components/UploadDataDetails";
 import ListingsMap from "../../posts/components/ListingsMap";
 import ListingDetails from "../../posts/components/ListingDetails";
 import Upload3DTour from "../../posts/components/Upload3DTour";
+import Logout from "../../users/components/Logout";
 
 
 const AppContent = () => {
@@ -31,6 +32,7 @@ const AppContent = () => {
             <Routes>
                 <Route path="/" element={<Body />} />
                 <Route path="users/login" element={<Login />} />
+                <Route path="users/logout" element={<Logout />} />
                 <Route path="users/signUp" element={<Register />} />
                 <Route path="users/details" element={<UserDetails />} />
                 <Route path="listings" element={<ListingsPage />} />

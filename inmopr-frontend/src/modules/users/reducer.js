@@ -8,7 +8,8 @@ import {combineReducers} from 'redux';
 import * as actionTypes from './actionTypes';
 
 const initialState = {
-    user: null
+    user: null,
+    token: null
 };
 
 const user = (state = initialState.user, action) => {
@@ -17,6 +18,9 @@ const user = (state = initialState.user, action) => {
 
         case actionTypes.LOGIN_COMPLETED:
             return action.authenticatedUser.user;
+
+        case actionTypes.LOGOUT_COMPLETED:
+            return initialState;
 
         default:
             return state;

@@ -14,6 +14,8 @@ export const login = (email, password, onSuccess, onErrors, reauthenticationCall
         },
         onErrors);
 
+export const logout = () => removeServiceToken();
+
 export const signUp = (user, onSuccess, onErrors, reauthenticationCallback) => {
     appFetch('/users/signUp', config('POST', user),
         authenticatedUser => {
