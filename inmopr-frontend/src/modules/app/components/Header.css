@@ -342,21 +342,24 @@
     display: inline-block;
 }
 
-.dropdown-content {
+.dropdown-content-header {
     display: none;
     position: absolute;
     background-color: #f9f9f9;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
-    right: 0; /* Esto alinea el menú a la derecha del contenedor padre */
+    right: 0;
+    min-width: 260px;
+    /* --- CORRECCIÓN: Posicionar el menú directamente debajo del enlace --- */
+    top: 100%;
 }
 
-/* Esta es la regla clave: cuando pasas el cursor sobre el .dropdown, se muestra el .dropdown-content */
-.dropdown:hover .dropdown-content {
+/* Esta es la regla clave: cuando pasas el cursor sobre el .dropdown, se muestra el .dropdown-content-header */
+.dropdown:hover .dropdown-content-header {
     display: block;
 }
 
-.dropdown-content a {
+.dropdown-content-header a {
     color: black;
     padding: 12px 16px;
     text-decoration: none;
@@ -364,7 +367,6 @@
 }
 
 /* Y ahora, solo lo añades cuando se pasa el cursor por encima */
-.dropdown-content a:hover {
+.dropdown-content-header a:hover {
     background-color: #f1f1f1;
-    text-decoration: underline; /* Añade el subrayado al pasar el ratón */
 }

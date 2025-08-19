@@ -91,7 +91,7 @@ public class PostsServiceImpl implements PostsService{
         existingPost.setOwnerName(updatedPost.getOwnerName());
         existingPost.setTelephone(updatedPost.getTelephone());
         existingPost.setEmail(updatedPost.getEmail());
-
+        existingPost.setModificationDate(LocalDateTime.now());
         // Actualizar las fechas y los URLs si se modifican
         existingPost.setModificationDate(LocalDateTime.now());
         existingPost.setUrls(updatedPost.getUrls());

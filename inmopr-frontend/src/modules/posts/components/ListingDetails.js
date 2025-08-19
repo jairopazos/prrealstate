@@ -177,7 +177,7 @@ const ListingDetails = () => {
     const calcularPrecioPorMetro = (precioNum, metrosStr) => {
         const metrosNum = parseFloat(metrosStr.replace(',', '.').replace(/[^\d.]+/g, ''));
         if (isNaN(precioNum) || precioNum <= 0 || isNaN(metrosNum) || metrosNum <= 0) return 'N/A';
-        return (precioNum / metrosNum).toFixed(2);
+        return (precioNum.replace('.', '') / metrosNum).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     };
 
     return (
@@ -390,8 +390,8 @@ const ListingDetails = () => {
                     </div>
                     <br></br><br></br>
                     <h3 className="property-precio">Precio</h3>
-                    <p className="property-feature-item">Precio de la propiedad 💶: {parseFloat(property.precio).toFixed(0)}€</p>
-                    <p className="property-feature-item">Precio por metro cuadrado 💶/📏 : {calcularPrecioPorMetro(parseFloat(property.precio.replace('.', '').replace(',', '.')), property.metrosConstruidos)} €/m²</p> {/* Corregido el parsing del precio */}
+                    <p className="property-feature-item">Precio de la propiedad 💶: {parseFloat(property.precio).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")}€</p>
+                    <p className="property-feature-item">Precio por metro cuadrado 💶/📐 : {calcularPrecioPorMetro(parseFloat(property.precio).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, "."), property.metrosConstruidos)} €/m²</p> {/* Corregido el parsing del precio */}
 
                     {/* Aquí están los botones de edición unificados */}
                     {canEdit && (

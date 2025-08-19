@@ -47,7 +47,7 @@ const Header = () => {
                         </a>
                         {/* Este es el menú que se mostrará */}
                         {userName && (
-                            <div className="dropdown-content">
+                            <div className="dropdown-content-header">
                                 <a href={`/listings/user/${userId}`}>Ver mis anuncios publicados</a>
                                 <a href="/users/logout">Cerrar sesión</a>
                             </div>
