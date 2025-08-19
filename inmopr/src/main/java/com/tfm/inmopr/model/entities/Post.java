@@ -48,6 +48,7 @@ public class Post {
     private BigDecimal precio;
     private String email;
     private List<String> urlsPanoramic;
+    private Long userId;
 
     public Post() {}
 
@@ -55,7 +56,8 @@ public class Post {
                 String ownerName, String telephone, LocalDateTime creationDate, LocalDateTime modificationDate, Address address,
                 Boolean ascensor, Boolean garaje, String metrosConstruidos, String metrosUtiles, String numHabitaciones, String numBanos,
                 Boolean exterior, Orientacion orientacion, Boolean amueblado, Boolean trastero, Boolean jardin, Boolean terraza,
-                Boolean calefaccion, Boolean piscina, Estado estado, BigDecimal precio, String email, List<String> urlsPanoramic) {
+                Boolean calefaccion, Boolean piscina, Estado estado, BigDecimal precio, String email, List<String> urlsPanoramic,
+                Long userId) {
         this.name = name;
         this.tipoAnuncio = tipoAnuncio;
         this.tipoVivienda = tipoVivienda;
@@ -84,12 +86,14 @@ public class Post {
         this.precio = precio;
         this.email = email;
         this.urlsPanoramic = urlsPanoramic;
+        this.userId = userId;
     }
 
     public Post(TipoAnuncio tipoAnuncio, TipoVivienda tipoVivienda, String description, List<String> urls, String ownerName,
                 String telephone, Address address, Boolean ascensor, Boolean garaje, String metrosConstruidos, String metrosUtiles, String numHabitaciones, String numBanos,
                 Boolean exterior, Orientacion orientacion, Boolean amueblado, Boolean trastero, Boolean jardin, Boolean terraza,
-                Boolean calefaccion, Boolean piscina, Estado estado, BigDecimal precio, String email, List<String> urlsPanoramic) {
+                Boolean calefaccion, Boolean piscina, Estado estado, BigDecimal precio, String email, List<String> urlsPanoramic,
+                Long userId) {
         this.tipoAnuncio = tipoAnuncio;
         this.tipoVivienda = tipoVivienda;
         this.description = description;
@@ -115,6 +119,7 @@ public class Post {
         this.precio = precio;
         this.email = email;
         this.urlsPanoramic = urlsPanoramic;
+        this.userId = userId;
     }
 
     @Id
@@ -365,5 +370,13 @@ public class Post {
 
     public void setUrlsPanoramic(List<String> urlsPanoramic) {
         this.urlsPanoramic = urlsPanoramic;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

@@ -10,8 +10,8 @@ import { PostContext } from './PostContext';
 import { useContext } from 'react';
 import {useNavigate} from "react-router-dom";
 import * as actions from "../actions";
-import {useDispatch} from "react-redux";
-
+import {useSelector, useDispatch} from 'react-redux';
+import users from '../../users';
 
 const UploadData = ({ onUploadComplete }) => {
     const dispatch = useDispatch();
@@ -26,7 +26,7 @@ const UploadData = ({ onUploadComplete }) => {
     const [email, setEmail] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [showSuccess, setShowSuccess] = useState(false);
-
+    const userId = useSelector(users.selectors.getUserId);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -60,7 +60,8 @@ const UploadData = ({ onUploadComplete }) => {
                     precio: postData.formattedPrice,
                     email: email,
                     urlsPanoramic: postData.urlsPanoramic,
-                    hotspots: postData.hotspots
+                    hotspots: postData.hotspots,
+                    userId: userId
                 },
                     () => setSuccessMessage(intl.formatMessage({
                         id: "project.publish.success",

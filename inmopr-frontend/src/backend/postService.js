@@ -8,6 +8,9 @@ import {config, appFetch} from "./appFetch";
 export const publishPost = (postDto, onSuccess, onErrors) =>
     appFetch('/listings/new', config('POST', postDto), onSuccess, onErrors);
 
+export const updatePost = (postDto, id, onSuccess, onErrors) =>
+    appFetch(`/listings/${id}`, config('POST', postDto), onSuccess, onErrors);
+
 export const fetchListings = (city, filters, page = 0, size = 10, onSuccess, onErrors) => {
     const params = new URLSearchParams();
 

@@ -4,7 +4,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import {useLocation, useParams} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import * as actions from '../actions';
 import './ListingsPage.css';
@@ -16,10 +16,12 @@ const useQuery = () => new URLSearchParams(useLocation().search);
 
 const ListingsPage = () => {
     const dispatch = useDispatch();
+    const { userId } = useParams();
     const query = useQuery();
     const city = query.get('city') || '';
     const [page, setPage] = useState(0);
     const [listings, setListings] = useState([]);
+    const [canEdit, setCanEdit] = useState(false);
     const [loading, setLoading] = useState(true);
     const [totalPages, setTotalPages] = useState(0);
     const [error, setError] = useState(null);
@@ -84,55 +86,81 @@ const ListingsPage = () => {
     };
 
     const handleCardClick = (property) => {
-        navigate(`/listing/details/${property.id}`);
+        navigate(`/listing/details/${property.id}`, { state: { canEdit: canEdit } });
     };
 
 
-    const loadListings = (newPage = 0) => {
+    const loadListings = (newPage = 0, city, userId) => {
         setLoading(true);
         setError(null);
+        let queryString = null;
+        let flatParams;
 
-        const flatParams = {
-            city,
-            page: newPage,
-            size: 10,
-            tipoAnuncio: filters.tipoAnuncio,
-            tipoVivienda: filters.tipoVivienda,
-            precioMaximo: filters.precioMax,
-            numHabitaciones: filters.habitaciones,
-            numBanos: filters.banos,
-            metrosConstruidos: filters.metrosConstruidos,
-            metrosUtiles: filters.metrosUtiles,
-            estado: filters.estado,
-            ...Object.entries(filters.comodidades).reduce((acc, [key, value]) => {
-                acc[key] = value;
-                return acc;
-            }, {})
-        };
+        if (city) {
 
-        const queryString = new URLSearchParams(flatParams).toString();
+            flatParams = {
+                city,
+                page: newPage,
+                size: 10,
+                tipoAnuncio: filters.tipoAnuncio,
+                tipoVivienda: filters.tipoVivienda,
+                precioMaximo: filters.precioMax,
+                numHabitaciones: filters.habitaciones,
+                numBanos: filters.banos,
+                metrosConstruidos: filters.metrosConstruidos,
+                metrosUtiles: filters.metrosUtiles,
+                estado: filters.estado,
+                ...Object.entries(filters.comodidades).reduce((acc, [key, value]) => {
+                    acc[key] = value;
+                    return acc;
+                }, {})
+            };
+            queryString = new URLSearchParams(flatParams).toString();
 
-        fetch(`/listings?${queryString}`)
-            .then(res => res.ok ? res.json() : Promise.reject(res))
-            .then(data => {
-                setListings(data.listings || []);
-                setTotalPages(data.totalPages);
-                setPage(data.currentPage + 1);
-                setLoading(false);
-            })
-            .catch(err => {
-                setError('Error al cargar los anuncios');
-                setLoading(false);
-            });
+            fetch(`/listings?${queryString}`)
+                .then(res => res.ok ? res.json() : Promise.reject(res))
+                .then(data => {
+                    setListings(data.listings || []);
+                    setTotalPages(data.totalPages);
+                    setPage(data.currentPage + 1);
+                    setLoading(false);
+                })
+                .catch(err => {
+                    setError('Error al cargar los anuncios');
+                    setLoading(false);
+                });
+        } else {
+            flatParams = {
+                userId,
+                page: newPage,
+                size: 10
+            };
+            setCanEdit(true);
+            queryString = new URLSearchParams(flatParams).toString();
+            fetch(`/listings?${queryString}`)
+                .then(res => res.ok ? res.json() : Promise.reject(res))
+                .then(data => {
+                    setListings(data.listings || []);
+                    setTotalPages(data.totalPages);
+                    setPage(data.currentPage + 1);
+                    setLoading(false);
+                })
+                .catch(err => {
+                    setError('Error al cargar los anuncios');
+                    setLoading(false);
+                });
+        }
     };
 
 
 
     useEffect(() => {
         if (city) {
-            loadListings(0);
+            loadListings(0, city, null);
+        } else if (userId) {
+            loadListings(0, null, userId);
         }
-    }, [city]);
+    }, [city, userId]);
 
 
     const handlePageChange = (newPage) => {

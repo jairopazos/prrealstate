@@ -9,11 +9,13 @@ import {FormattedMessage} from "react-intl";
 import users from '../../users';
 import {useSelector} from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import {getUserId} from "../../users/selectors";
 
 
 const Header = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const userName = useSelector(users.selectors.getFirstName);
+    const userId = useSelector(users.selectors.getUserId);
     const location = useLocation();
     const isOnPostPage = location.pathname.startsWith('/listings/new');
 
@@ -38,10 +40,19 @@ const Header = () => {
                             <FormattedMessage id="project.app.href.publishpost"/>}
                     </a>)}
 
-                    <a href={userName ? "/users/details" : "/users/login"} className="login-link">
-                        {userName ? userName :
-                            <FormattedMessage id="project.app.href.micuenta"/>}
-                    </a>
+                    <div className="dropdown">
+                        <a href={userName ? "/users/details" : "/users/login"} className="login-link">
+                            {userName ? userName :
+                                <FormattedMessage id="project.app.href.micuenta"/>}
+                        </a>
+                        {/* Este es el menú que se mostrará */}
+                        {userName && (
+                            <div className="dropdown-content">
+                                <a href={`/listings/user/${userId}`}>Ver mis anuncios publicados</a>
+                                <a href="/users/logout">Cerrar sesión</a>
+                            </div>
+                        )}
+                    </div>
 
                     <div className={`hamburger ${menuOpen ? 'active' : ''}`} onClick={toggleMenu}>
                         <span className="bar"></span>

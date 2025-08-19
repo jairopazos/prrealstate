@@ -6,18 +6,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions';
 import users from '../../users';
 import MarzipanoTour from './MarzipanoTour'; // ¡IMPORTA TU COMPONENTE MARZIPANO TOUR!
+import { useLocation } from 'react-router-dom';
+
 
 const ListingDetails = () => {
     const { id } = useParams();
     const [property, setProperty] = useState(null);
+    const [editableProperty, setEditableProperty] = useState(null); // Nuevo estado para los datos editables
     const [currentIndex, setCurrentIndex] = useState(0);
     const [message, setMessage] = useState("");
     const [isSending, setIsSending] = useState(false);
     const [sendStatus, setSendStatus] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const location = useLocation();
+    const canEdit = location.state?.canEdit || false;
     // Nuevo estado para controlar la vista: false para fotos normales, true para 360
     const [show360Tour, setShow360Tour] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
 
     const userEmail = useSelector(users.selectors.getEmail);
     const dispatch = useDispatch();
@@ -32,6 +38,7 @@ const ListingDetails = () => {
             })
             .then(data => {
                 setProperty(data);
+                setEditableProperty(data);
                 // Si hay URLs panorámicas, podemos ofrecer el tour 360
                 // Opcional: Establecer el estado inicial del tour 360 si hay panoramas
                 // setShow360Tour(data.urlsPanoramic && data.urlsPanoramic.length > 0);
@@ -46,6 +53,75 @@ const ListingDetails = () => {
 
     const creationDateFormatted = new Date(property.creationDate).toLocaleDateString('es-ES');
     const modificationDateFormatted = new Date(property.modificationDate).toLocaleDateString('es-ES');
+
+    // Manejadores de eventos de edición
+    const handleEditChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setEditableProperty(prev => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value
+        }));
+    };
+
+    const handleSave = () => {
+        if (!editableProperty) {
+            return;
+        }
+
+        const requestOptions = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(editableProperty)
+        };
+
+        dispatch(actions.updatePost({
+                tipoAnuncio: editableProperty.tipoAnuncio,
+                tipoVivienda: editableProperty.tipoVivienda,
+                description: editableProperty.description,
+                urls: editableProperty.urls,
+                ownerName: editableProperty.ownerName,
+                telephone: editableProperty.telephone,
+                formattedPrice: editableProperty.formattedPrice,
+                address: editableProperty.address,
+                ascensor: editableProperty.ascensor,
+                garaje: editableProperty.garaje,
+                metrosConstruidos: editableProperty.metrosConstruidos,
+                metrosUtiles: editableProperty.metrosUtiles,
+                numHabitaciones: editableProperty.numHabitaciones,
+                numBanos: editableProperty.numBanos,
+                exterior: editableProperty.exterior,
+                orientacion: editableProperty.orientacion,
+                amueblado: editableProperty.amueblado,
+                trastero: editableProperty.trastero,
+                jardin: editableProperty.jardin,
+                terraza: editableProperty.terraza,
+                calefaccion: editableProperty.calefaccion,
+                piscina: editableProperty.piscina,
+                estado: editableProperty.estado,
+                precio: editableProperty.precio.split('.00')[0],
+                email: editableProperty.email,
+                urlsPanoramic: editableProperty.urlsPanoramic,
+                hotspots: editableProperty.hotspots}, id,
+            (updatedData) => {
+                // Maneja el éxito aquí
+                setProperty(updatedData);
+                setEditableProperty(updatedData);
+                setIsEditing(false);
+                alert('Anuncio actualizado con éxito!');
+            },
+            (error) => {
+                // Maneja el error aquí
+                console.error('Fallo al actualizar el anuncio:', error);
+                alert(`Error: ${error.message}`);
+            }
+        ));
+    };
+
+    const handleCancel = () => {
+        // Restablece los datos a los originales y desactiva el modo de edición
+        setEditableProperty(property);
+        setIsEditing(false);
+    };
 
     const htmlMessage = `
     <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
@@ -113,10 +189,23 @@ const ListingDetails = () => {
             <div className="details-wrapper">
 
                 <div className="left-panel">
+
+
                     <h1 className="property-name">{property.name}</h1>
-                    <h2 className="property-precio-titulo">
-                        {parseFloat(property.precio).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €
-                    </h2>
+
+                    {isEditing ? (
+                        <input
+                            className="property-precio-titulo-edit"
+                            type="number"
+                            name="precio"
+                            value={editableProperty?.precio || ''}
+                            onChange={handleEditChange}
+                        />
+                    ) : (
+                        <h2 className="property-precio-titulo">
+                            {parseFloat(property.precio).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")} €
+                        </h2>
+                    )}
 
                     {/* Botones de alternancia entre fotos y tour 360 */}
                     <div className="view-toggle-buttons" style={{ marginBottom: '15px', textAlign: 'center' }}>
@@ -184,15 +273,96 @@ const ListingDetails = () => {
 
                     <br></br><br></br><br></br>
                     <h3 className="property-precio">Comentario del anunciante</h3>
-                    <p className={"property-description"}>{property.description}</p>
-                    <br></br><br></br>
+                    {isEditing ? (
+                        <textarea
+                            className="property-description-edit"
+                            name="description"
+                            value={editableProperty?.description || ''}
+                            onChange={handleEditChange}
+                        />
+                    ) : (
+                        <p className={"property-description"}>{property.description}</p>
+                    )}                    <br></br><br></br>
                     <h3 className="property-precio">Características</h3>
-                    <p className="caracteristicas-p">Metros construidos:  {property.metrosConstruidos}📏</p>
-                    <p className="property-precio-p">Metros útiles:  {property.metrosUtiles}📐</p>
-                    <p className="property-precio-p">Número de habitaciones:  {property.numHabitaciones}🛌</p>
-                    <p className="property-precio-p">Número de baños:  {property.numBanos}🛀</p>
-                    <p className="property-precio-p">Estado:  {property.estado}⭐</p>
-                    <p className="property-precio-p">Orientación:  {property.orientacion}📍</p>
+                    <div className="property-feature-row">
+                        <span>Metros construidos:</span>
+                        Metros construidos:
+                        {isEditing ? (
+                            <input
+                                type="text"
+                                name="metrosConstruidos"
+                                value={editableProperty?.metrosConstruidos || ''}
+                                onChange={handleEditChange}
+                            />
+                        ) : (
+                            <span> {property.metrosConstruidos}📏</span>
+                        )}
+                    </div>
+                    <p className="property-feature-item">
+                        Metros útiles:
+                        {isEditing ? (
+                            <input
+                                type="text"
+                                name="metrosUtiles"
+                                value={editableProperty?.metrosUtiles || ''}
+                                onChange={handleEditChange}
+                            />
+                        ) : (
+                            <span> {property.metrosUtiles}📐</span>
+                        )}
+                    </p>
+                    <p className="property-feature-item">
+                        Número de habitaciones:
+                        {isEditing ? (
+                            <input
+                                type="number"
+                                name="numHabitaciones"
+                                value={editableProperty?.numHabitaciones || ''}
+                                onChange={handleEditChange}
+                            />
+                        ) : (
+                            <span> {property.numHabitaciones}🛌</span>
+                        )}
+                    </p>
+                    <p className="property-feature-item">
+                        Número de baños:
+                        {isEditing ? (
+                            <input
+                                type="number"
+                                name="numBanos"
+                                value={editableProperty?.numBanos || ''}
+                                onChange={handleEditChange}
+                            />
+                        ) : (
+                            <span> {property.numBanos}🛀</span>
+                        )}
+                    </p>
+                    <p className="property-feature-item">
+                        Estado:
+                        {isEditing ? (
+                            <input
+                                type="text"
+                                name="estado"
+                                value={editableProperty?.estado || ''}
+                                onChange={handleEditChange}
+                            />
+                        ) : (
+                            <span> {property.estado}⭐</span>
+                        )}
+                    </p>
+                    <p className="property-feature-item">
+                        Orientación:
+                        {isEditing ? (
+                            <input
+                                type="text"
+                                name="orientacion"
+                                value={editableProperty?.orientacion || ''}
+                                onChange={handleEditChange}
+                            />
+                        ) : (
+                            <span> {property.orientacion}📍</span>
+                        )}
+                    </p>
 
                     <div className="features-list">
                         {[
@@ -207,22 +377,85 @@ const ListingDetails = () => {
                             { label: '🛋️ Amueblado', key: 'amueblado' }
                         ].map(feature => (
                             <label key={feature.key}>
-                                <input type="checkbox" checked={property[feature.key]} disabled />
+                                <input
+                                    type="checkbox"
+                                    name={feature.key}
+                                    checked={isEditing ? (editableProperty?.[feature.key] || false) : (property[feature.key] || false)}
+                                    onChange={handleEditChange}
+                                    disabled={!isEditing}
+                                />
                                 {feature.label}
                             </label>
                         ))}
                     </div>
                     <br></br><br></br>
                     <h3 className="property-precio">Precio</h3>
-                    <p className="property-precio-p">Precio de la propiedad 💶: {parseFloat(property.precio).toFixed(0)}€</p>
-                    <p className="property-precio-p">Precio por metro cuadrado 💶/📏 : {calcularPrecioPorMetro(parseFloat(property.precio.replace('.', '').replace(',', '.')), property.metrosConstruidos)} €/m²</p> {/* Corregido el parsing del precio */}
+                    <p className="property-feature-item">Precio de la propiedad 💶: {parseFloat(property.precio).toFixed(0)}€</p>
+                    <p className="property-feature-item">Precio por metro cuadrado 💶/📏 : {calcularPrecioPorMetro(parseFloat(property.precio.replace('.', '').replace(',', '.')), property.metrosConstruidos)} €/m²</p> {/* Corregido el parsing del precio */}
+
+                    {/* Aquí están los botones de edición unificados */}
+                    {canEdit && (
+                        <div className="edit-button-container">
+                            {!isEditing ? (
+                                <button className="edit-button" onClick={() => setIsEditing(true)}>
+                                    <FormattedMessage id="listing.details.edit" defaultMessage="Editar Anuncio" />
+                                </button>
+                            ) : (
+                                <>
+                                    <button className="save-button" onClick={handleSave}>
+                                        <FormattedMessage id="listing.details.save" defaultMessage="Guardar" />
+                                    </button>
+                                    <button className="cancel-button" onClick={handleCancel}>
+                                        <FormattedMessage id="listing.details.cancel" defaultMessage="Cancelar" />
+                                    </button>
+                                </>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 <div className="right-panel">
                     <div className="agent-card">
                         <h3 className="datos-anunciante">Datos del anunciante</h3>
-                        <p><strong>Nombre:</strong> {property.ownerName || 'No disponible'}</p>
-                        <p><strong>Teléfono:</strong> {property.telephone || 'No disponible'}</p>
+                        <p>
+                            <strong>Nombre:</strong>
+                            {isEditing ? (
+                                <input
+                                    type="text"
+                                    name="ownerName"
+                                    value={editableProperty?.ownerName || ''}
+                                    onChange={handleEditChange}
+                                />
+                            ) : (
+                                <span> {property.ownerName || 'No disponible'}</span>
+                            )}
+                        </p>
+                        <p>
+                            <strong>Teléfono:</strong>
+                            {isEditing ? (
+                                <input
+                                    type="text"
+                                    name="telephone"
+                                    value={editableProperty?.telephone || ''}
+                                    onChange={handleEditChange}
+                                />
+                            ) : (
+                                <span> {property.telephone || 'No disponible'}</span>
+                            )}
+                        </p>
+                        <p>
+                            <strong>Email:</strong>
+                            {isEditing ? (
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={editableProperty?.email || ''}
+                                    onChange={handleEditChange}
+                                />
+                            ) : (
+                                <span> {property.email || 'No disponible'}</span>
+                            )}
+                        </p>
                         <p><strong>Publicado en:</strong> {creationDateFormatted}</p>
                         <p><strong>Modificado en:</strong> {modificationDateFormatted}</p>
 

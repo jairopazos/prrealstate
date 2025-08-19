@@ -48,19 +48,8 @@ public class PostController {
         }
     }
 
-    @PostMapping("/new")
-    public void newPost(@RequestAttribute Long userId, @Validated @RequestBody PostDto postDto) {
-
-        postsService.publishPost(userId, postDto);
-    }
-
-    @GetMapping
-    public ResponseEntity<Map<String, Object>> getListings(
-            @RequestParam(required = false, defaultValue = "") String city,
-            @ModelAttribute PropertyOptionsDto propertyOptionsDto,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "0") int size
-    ) {
+    private ResponseEntity<Map<String, Object>> getListingsByCity(String city, PropertyOptionsDto propertyOptionsDto,
+        int page, int size) {
         Pageable paging = PageRequest.of(page, size);
         Page<Post> pageListings = null;
         if (isFiltersEnabled(propertyOptionsDto)) {
@@ -79,6 +68,54 @@ public class PostController {
         map.put("currentPage", pageListings.getNumber());
 
         return ResponseEntity.ok(map);
+    }
+
+    private ResponseEntity<Map<String, Object>> getListingsByUserId(String userId, int page, int size) {
+        Pageable paging = PageRequest.of(page, size);
+        Page<Post> pageListings = null;
+
+        pageListings = postsService.findByUserId(userId, paging);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("listings", pageListings.getContent());
+        map.put("total", pageListings.getTotalElements());
+        map.put("totalPages", pageListings.getTotalPages());
+        map.put("currentPage", pageListings.getNumber());
+
+        return ResponseEntity.ok(map);
+    }
+
+    @PostMapping("/new")
+    public void newPost(@RequestAttribute Long userId, @Validated @RequestBody PostDto postDto) {
+
+        postsService.publishPost(userId, postDto);
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<PostDto> updatePost(@PathVariable Long id, @Validated @RequestBody PostDto postDto) {
+        try {
+            Post updatedPost = postsService.updatePost(id, postDto);
+            return ResponseEntity.ok(toPostDto(updatedPost));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<Map<String, Object>> getListings(
+            @RequestParam(required = false, defaultValue = "") String city,
+            @RequestParam(required = false, defaultValue = "") String userId,
+            @ModelAttribute PropertyOptionsDto propertyOptionsDto,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "0") int size
+    ) {
+        if (!city.isEmpty()) {
+            return getListingsByCity(city, propertyOptionsDto, page, size);
+        } else if (!userId.isEmpty()) {
+            return getListingsByUserId(userId, page, size);
+        } else {
+            return null;
+        }
     }
 
     @GetMapping("/{id}")

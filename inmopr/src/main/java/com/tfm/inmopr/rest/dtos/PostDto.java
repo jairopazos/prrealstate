@@ -53,6 +53,7 @@ public class PostDto {
     private String precio;
     private String email;
     private List<String> urlsPanoramic;
+    private Long userId;
 
     public PostDto() {}
 
@@ -60,7 +61,8 @@ public class PostDto {
                    List<String> urls, String ownerName, String telephone, LocalDateTime creationDate, LocalDateTime modificationDate,
                    Address address, Boolean ascensor, Boolean garaje, String metrosConstruidos, String metrosUtiles, String numHabitaciones, String numBanos,
                    Boolean exterior, Orientacion orientacion, Boolean amueblado, Boolean trastero, Boolean jardin, Boolean terraza,
-                   Boolean calefaccion, Boolean piscina, Estado estado, String precio, String email, List<String> urlsPanoramic) {
+                   Boolean calefaccion, Boolean piscina, Estado estado, String precio, String email, List<String> urlsPanoramic,
+                   Long userId) {
         this.id = id;
         this.name = name;
         this.tipoAnuncio = tipoAnuncio;
@@ -90,13 +92,15 @@ public class PostDto {
         this.precio = precio;
         this.email = email;
         this.urlsPanoramic = urlsPanoramic;
+        this.userId = userId;
     }
 
     public PostDto(String name, TipoAnuncio tipoAnuncio, TipoVivienda tipoVivienda, String description,
                    List<String> urls, String ownerName, String telephone, LocalDateTime creationDate, LocalDateTime modificationDate,
                    Address address, Boolean ascensor, Boolean garaje, String metrosConstruidos, String metrosUtiles, String numHabitaciones, String numBanos,
                    Boolean exterior, Orientacion orientacion, Boolean amueblado, Boolean trastero, Boolean jardin, Boolean terraza,
-                   Boolean calefaccion, Boolean piscina, Estado estado, String precio, String email, List<String> urlsPanoramic) {
+                   Boolean calefaccion, Boolean piscina, Estado estado, String precio, String email, List<String> urlsPanoramic,
+                   Long userId) {
         this.name = name;
         this.tipoAnuncio = tipoAnuncio;
         this.tipoVivienda = tipoVivienda;
@@ -125,6 +129,7 @@ public class PostDto {
         this.precio = precio;
         this.email = email;
         this.urlsPanoramic = urlsPanoramic;
+        this.userId = userId;
     }
 
     public PostDto(Long id, TipoAnuncio tipoAnuncio, TipoVivienda tipoVivienda, String description, List<String> urls,
@@ -402,5 +407,13 @@ public class PostDto {
 
     public void setUrlsPanoramic(List<String> urlsPanoramic) {
         this.urlsPanoramic = urlsPanoramic;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

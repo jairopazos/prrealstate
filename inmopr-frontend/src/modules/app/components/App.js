@@ -34,6 +34,7 @@ const AppContent = () => {
                 <Route path="users/signUp" element={<Register />} />
                 <Route path="users/details" element={<UserDetails />} />
                 <Route path="listings" element={<ListingsPage />} />
+                <Route path="listings/user/:userId" element={<ListingsPage />} />
                 <Route path="listings/new" element={<PublishPost />} />
                 <Route path="listings/new/uploadData" element={<UploadData />} />
                 <Route path="listings/new/uploadDataDetails" element={<UploadDataDetails />} />

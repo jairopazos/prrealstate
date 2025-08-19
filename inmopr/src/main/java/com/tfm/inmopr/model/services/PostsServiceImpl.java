@@ -22,6 +22,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static com.tfm.inmopr.rest.dtos.PostConversor.toPost;
 
@@ -48,6 +49,7 @@ public class PostsServiceImpl implements PostsService{
                 postDto.getAddress().getStreet(), postDto.getAddress().getPostalCode(), postDto.getAddress().getNumber(),
                 postDto.getAddress().getHeight(), postDto.getAddress().getLetter());
         addressDao.save(address);
+        postDto.setUserId(userId);
         postDto.setAddress(address);
         Post post = toPost(postDto);
         post.setCreationDate(LocalDateTime.now());
@@ -56,6 +58,51 @@ public class PostsServiceImpl implements PostsService{
         post.setName(postName);
         postDao.save(post);
     }
+
+    @Override
+    @Transactional
+    public Post updatePost(Long id, PostDto postDto) {
+        Optional<Post> postOptional = postDao.findById(id);
+
+        if (postOptional.isEmpty()) {
+            throw new RuntimeException("Post not found with id " + id);
+        }
+
+        Post existingPost = postOptional.get();
+        Post updatedPost = toPost(postDto);
+
+        // Actualizar todos los campos editables
+        existingPost.setPrecio(updatedPost.getPrecio());
+        existingPost.setDescription(updatedPost.getDescription());
+        existingPost.setMetrosConstruidos(updatedPost.getMetrosConstruidos());
+        existingPost.setMetrosUtiles(updatedPost.getMetrosUtiles());
+        existingPost.setNumHabitaciones(updatedPost.getNumHabitaciones());
+        existingPost.setNumBanos(updatedPost.getNumBanos());
+        existingPost.setEstado(updatedPost.getEstado());
+        existingPost.setOrientacion(updatedPost.getOrientacion());
+        existingPost.setAscensor(updatedPost.getAscensor());
+        existingPost.setGaraje(updatedPost.getGaraje());
+        existingPost.setTrastero(updatedPost.getTrastero());
+        existingPost.setCalefaccion(updatedPost.getCalefaccion());
+        existingPost.setJardin(updatedPost.getJardin());
+        existingPost.setTerraza(updatedPost.getTerraza());
+        existingPost.setExterior(updatedPost.getExterior());
+        existingPost.setAmueblado(updatedPost.getAmueblado());
+        existingPost.setOwnerName(updatedPost.getOwnerName());
+        existingPost.setTelephone(updatedPost.getTelephone());
+        existingPost.setEmail(updatedPost.getEmail());
+
+        // Actualizar las fechas y los URLs si se modifican
+        existingPost.setModificationDate(LocalDateTime.now());
+        existingPost.setUrls(updatedPost.getUrls());
+        existingPost.setUrlsPanoramic(updatedPost.getUrlsPanoramic());
+
+        // Guardar los cambios en la base de datos
+        return postDao.save(existingPost);
+    }
+
+
+
 
     @Override
     public Page<Post> findByCityAndFiltersContainingIgnoreCase(String city, PropertyOptionsDto propertyOptionsDto, Pageable pageable) {
@@ -70,6 +117,11 @@ public class PostsServiceImpl implements PostsService{
     @Override
     public Page<Post> findByCityContainingIgnoreCase(String city, Pageable pageable) {
         return postDao.findByAddress_CityContainingIgnoreCase(city, pageable);
+    }
+
+    @Override
+    public Page<Post> findByUserId(String userId, Pageable pageable) {
+        return postDao.findByUserId(Long.valueOf(userId), pageable);
     }
 
     @Override

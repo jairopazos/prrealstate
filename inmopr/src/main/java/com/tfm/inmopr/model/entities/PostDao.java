@@ -63,4 +63,8 @@ public interface PostDao extends PagingAndSortingRepository<Post, Long>, CrudRep
             @Param("calefaccion") Boolean calefaccion,
             @Param("piscina") Boolean piscina,
             Pageable pageable);
+
+    @Query("SELECT p FROM Post p JOIN FETCH p.address WHERE p.userId = :userId")
+    Page<Post> findByUserId(@Param("userId") Long userId, Pageable pageable);
+
 }

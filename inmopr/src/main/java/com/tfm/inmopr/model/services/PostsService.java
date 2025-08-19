@@ -14,9 +14,13 @@ import org.springframework.data.domain.Pageable;
 public interface PostsService {
     void publishPost(Long userId, PostDto post);
 
+    Post updatePost(Long userId, PostDto post);
+
     Page<Post> findByCityAndFiltersContainingIgnoreCase(String city, PropertyOptionsDto propertyOptionsDto, Pageable pageable);
 
     Page<Post> findByCityContainingIgnoreCase(String city, Pageable pageable);
+
+    Page<Post> findByUserId(String userId, Pageable pageable);
 
     void sendEmail(String to, String from, String subject, String body);
 }

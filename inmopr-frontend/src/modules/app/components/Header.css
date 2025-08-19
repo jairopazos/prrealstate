@@ -99,27 +99,26 @@
 .nav-right .publish-link::after {
     content: '';
     position: absolute;
-    bottom: 0; /* Posiciona la línea en la parte inferior del texto */
+    bottom: 0;
     left: 0;
     width: 100%;
-    height: 2px; /* Grosor de la línea */
-    /* --- CAMBIO: Color del subrayado a ORO (#bfa980) --- */
-    background-color: #bfa980; /* Color oro para el subrayado */
-    transform: translateX(-100%); /* Inicialmente fuera de la vista a la izquierda */
-    transition: transform 0.3s ease-out; /* Animación de deslizamiento suave */
-}
-
-/* Efecto hover para .nav-right links */
-.nav-right .login-link:hover,
-.nav-right .publish-link:hover {
-    /* El color del texto no cambia, solo el subrayado se mueve */
-    transform: translateY(-3px); /* Se levanta ligeramente al pasar el ratón */
+    height: 2px;
+    background-color: #bfa980;
+    /* La clave es esta línea. La línea está completamente fuera de la vista. */
+    transform: translateX(-100%);
+    /* Y ahora la hacemos invisible para asegurarnos */
+    visibility: hidden;
+    transition: transform 0.3s ease-out, visibility 0s 0.3s;
 }
 
 /* La línea se desliza al pasar el ratón */
 .nav-right .login-link:hover::after,
 .nav-right .publish-link:hover::after {
-    transform: translateX(0%); /* La línea se desliza a su posición */
+    /* La hacemos visible al pasar el ratón */
+    visibility: visible;
+    /* Mueve la línea a su posición original */
+    transform: translateX(0%);
+    transition-delay: 0s;
 }
 
 /* Efecto active (clic) para .nav-right links */
@@ -336,4 +335,36 @@
     text-align: center; /* Centrar el título */
     margin: 20px 0; /* Espaciado adecuado */
     text-decoration: none;
+}
+
+.dropdown {
+    position: relative; /* Esencial para que el menú se posicione correctamente respecto a este contenedor */
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    right: 0; /* Esto alinea el menú a la derecha del contenedor padre */
+}
+
+/* Esta es la regla clave: cuando pasas el cursor sobre el .dropdown, se muestra el .dropdown-content */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Y ahora, solo lo añades cuando se pasa el cursor por encima */
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+    text-decoration: underline; /* Añade el subrayado al pasar el ratón */
 }

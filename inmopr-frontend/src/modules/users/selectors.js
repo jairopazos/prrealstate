@@ -20,5 +20,7 @@ export const getFirstName = state =>
 export const getEmail = state =>
     isLoggedIn(state) ? getUser(state).email : null;
 
+export const getUserId = state =>
+    isLoggedIn(state) ? getUser(state).id : null;
 
 
