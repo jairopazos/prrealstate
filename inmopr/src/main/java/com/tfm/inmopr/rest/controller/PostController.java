@@ -8,25 +8,30 @@ package com.tfm.inmopr.rest.controller;
 import com.tfm.inmopr.model.entities.EmailRequest;
 import com.tfm.inmopr.model.entities.Post;
 import com.tfm.inmopr.model.entities.PostDao;
+import com.tfm.inmopr.model.entities.User;
 import com.tfm.inmopr.model.services.PostsService;
+import com.tfm.inmopr.model.services.UserService;
 import com.tfm.inmopr.rest.dtos.PostDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static com.tfm.inmopr.rest.dtos.PostConversor.toPostDto;
 
 @RestController
 @RequestMapping("/listings")
 public class PostController {
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private PostsService postsService;
@@ -85,6 +90,51 @@ public class PostController {
         return ResponseEntity.ok(map);
     }
 
+    private ResponseEntity<Map<String, Object>> getListingsByFavorites(String userId, int page, int size) {
+        Pageable paging = PageRequest.of(page, size);
+
+        // 1. Recuperamos el usuario
+        User user = userService.findById(Long.parseLong(userId))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
+
+        // 2. Obtenemos su lista de URLs favoritas
+        List<String> favUrls = user.getFavorites();
+        if (favUrls == null || favUrls.isEmpty()) {
+            Map<String, Object> emptyMap = new HashMap<>();
+            emptyMap.put("listings", List.of());
+            emptyMap.put("total", 0);
+            emptyMap.put("totalPages", 0);
+            emptyMap.put("currentPage", page);
+            return ResponseEntity.ok(emptyMap);
+        }
+
+        // 3. Extraemos los IDs de esas URLs (ej: "/listing/details/5" -> 5)
+        List<Long> favIds = favUrls.stream()
+                .map(url -> {
+                    try {
+                        return Long.parseLong(url.replace("/listing/details/", ""));
+                    } catch (NumberFormatException e) {
+                        return null; // ignora URLs que no sigan el formato
+                    }
+                })
+                .filter(Objects::nonNull)
+                .toList();
+
+        // 4. Consultamos al repo
+        Page<Post> pageListings = postsService.findByIdIn(favIds, paging);
+
+        // 5. Devolvemos en el mismo formato que tu ejemplo
+        Map<String, Object> map = new HashMap<>();
+        map.put("listings", pageListings.getContent());
+        map.put("total", pageListings.getTotalElements());
+        map.put("totalPages", pageListings.getTotalPages());
+        map.put("currentPage", pageListings.getNumber());
+
+        return ResponseEntity.ok(map);
+    }
+
+
+
     @PostMapping("/new")
     public void newPost(@RequestAttribute Long userId, @Validated @RequestBody PostDto postDto) {
 
@@ -105,16 +155,24 @@ public class PostController {
     public ResponseEntity<Map<String, Object>> getListings(
             @RequestParam(required = false, defaultValue = "") String city,
             @RequestParam(required = false, defaultValue = "") String userId,
+            @RequestParam(required = false, defaultValue = "") String favorites,
             @ModelAttribute PropertyOptionsDto propertyOptionsDto,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "0") int size
+            @RequestParam(defaultValue = "10") int size
     ) {
         if (!city.isEmpty()) {
             return getListingsByCity(city, propertyOptionsDto, page, size);
+        } else if ("true".equalsIgnoreCase(favorites) && !userId.isEmpty()) {
+            return getListingsByFavorites(userId, page, size);
         } else if (!userId.isEmpty()) {
             return getListingsByUserId(userId, page, size);
         } else {
-            return null;
+            return ResponseEntity.ok(Map.of(
+                    "listings", List.of(),
+                    "total", 0,
+                    "totalPages", 0,
+                    "currentPage", page
+            ));
         }
     }
 

@@ -19,6 +19,7 @@ const ListingsPage = () => {
     const { userId } = useParams();
     const query = useQuery();
     const city = query.get('city') || '';
+    const favorites = query.get('favorites') || ''; // "true" o null
     const [page, setPage] = useState(0);
     const [listings, setListings] = useState([]);
     const [canEdit, setCanEdit] = useState(false);
@@ -90,7 +91,7 @@ const ListingsPage = () => {
     };
 
 
-    const loadListings = (newPage = 0, city, userId) => {
+    const loadListings = (newPage = 0, city, userId, favorites) => {
         setLoading(true);
         setError(null);
         let queryString = null;
@@ -100,6 +101,39 @@ const ListingsPage = () => {
 
             flatParams = {
                 city,
+                page: newPage,
+                size: 10,
+                tipoAnuncio: filters.tipoAnuncio,
+                tipoVivienda: filters.tipoVivienda,
+                precioMaximo: filters.precioMax,
+                numHabitaciones: filters.habitaciones,
+                numBanos: filters.banos,
+                metrosConstruidos: filters.metrosConstruidos,
+                metrosUtiles: filters.metrosUtiles,
+                estado: filters.estado,
+                ...Object.entries(filters.comodidades).reduce((acc, [key, value]) => {
+                    acc[key] = value;
+                    return acc;
+                }, {})
+            };
+            queryString = new URLSearchParams(flatParams).toString();
+
+            fetch(`/listings?${queryString}`)
+                .then(res => res.ok ? res.json() : Promise.reject(res))
+                .then(data => {
+                    setListings(data.listings || []);
+                    setTotalPages(data.totalPages);
+                    setPage(data.currentPage + 1);
+                    setLoading(false);
+                })
+                .catch(err => {
+                    setError('Error al cargar los anuncios');
+                    setLoading(false);
+                });
+        } else if (favorites == "true") {
+            flatParams = {
+                favorites,
+                userId,
                 page: newPage,
                 size: 10,
                 tipoAnuncio: filters.tipoAnuncio,
@@ -157,8 +191,10 @@ const ListingsPage = () => {
     useEffect(() => {
         if (city) {
             loadListings(0, city, null);
-        } else if (userId) {
+        } else if (userId && !favorites) {
             loadListings(0, null, userId);
+        } else if (favorites) {
+            loadListings(0, null, userId,favorites);
         }
     }, [city, userId]);
 

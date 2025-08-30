@@ -4,6 +4,7 @@ import './ListingDetails.css';
 import { FormattedMessage, useIntl } from "react-intl";
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions';
+import * as userActions from '../../users/actions';
 import users from '../../users';
 import MarzipanoTour from './MarzipanoTour'; // ¡IMPORTA TU COMPONENTE MARZIPANO TOUR!
 import { useLocation } from 'react-router-dom';
@@ -24,11 +25,52 @@ const ListingDetails = () => {
     // Nuevo estado para controlar la vista: false para fotos normales, true para 360
     const [show360Tour, setShow360Tour] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
-
+    const user = useSelector(users.selectors.getUser);
+    const userName = useSelector(users.selectors.getFirstName);
     const userEmail = useSelector(users.selectors.getEmail);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const intl = useIntl();
+    const [isFavorite, setIsFavorite] = useState(false);
+
+    useEffect(() => {
+        if (user?.favorites) {
+            setIsFavorite(user.favorites.includes(`/listing/details/${id}`));
+        } else {
+            setIsFavorite(false);
+        }
+    }, [user, id]);
+
+
+
+
+    const toggleFavorite = () => {
+        if (!userName || !user) return;
+
+        const listingUrl = `/listing/details/${id}`;
+
+        // ✅ Calculamos el nuevo array a partir del estado local
+        const newFavorites = isFavorite
+            ? (user.favorites || []).filter(f => f !== listingUrl)
+            : [...(user.favorites || []), listingUrl];
+
+        dispatch(
+            userActions.updateProfile(
+                { ...user, favorites: newFavorites },
+                (updatedUser) => {
+                    // sincronizamos con backend
+                    setIsFavorite(updatedUser.favorites.includes(listingUrl));
+                },
+                (err) => console.error("Error favoritos ❌", err)
+            )
+        );
+    };
+
+
+
+
+
+
 
     useEffect(() => {
         fetch(`/listings/${id}`)
@@ -476,8 +518,19 @@ const ListingDetails = () => {
                         {sendStatus === "success" && <p className="success-msg">Mensaje enviado con éxito.</p>}
                         {sendStatus === "error" && <p className="error-msg">Error al enviar el mensaje.</p>}
                     </div>
-                </div>
+                    {userEmail && (
+                        <button onClick={toggleFavorite} className="favorite-button">
+                              <span className={`heart ${isFavorite ? "active" : ""}`}>
+                                {isFavorite ? "❤" : "♡"}
+                              </span>
+                            <span className="favorite-text">
+                                {isFavorite ? "Anuncio favorito" : "Marcar como favorito"}
+                            </span>
+                        </button>
 
+
+                    )}
+                </div>
             </div>
         </div>
     );

@@ -12,6 +12,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface PostDao extends PagingAndSortingRepository<Post, Long>, CrudRepository<Post, Long> {
 
     @Query("SELECT p FROM Post p JOIN FETCH p.address WHERE p.address.city LIKE %:city%")
@@ -67,4 +69,6 @@ public interface PostDao extends PagingAndSortingRepository<Post, Long>, CrudRep
     @Query("SELECT p FROM Post p JOIN FETCH p.address WHERE p.userId = :userId")
     Page<Post> findByUserId(@Param("userId") Long userId, Pageable pageable);
 
+    @Query("SELECT p FROM Post p JOIN FETCH p.address WHERE p.id IN :ids")
+    Page<Post> findByIdIn(List<Long> ids, Pageable pageable);
 }

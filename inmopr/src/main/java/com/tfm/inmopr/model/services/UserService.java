@@ -11,6 +11,8 @@ import com.tfm.inmopr.model.exceptions.IncorrectLoginException;
 import com.tfm.inmopr.model.exceptions.InstanceNotFoundException;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -18,6 +20,9 @@ public interface UserService {
 
     void signUp(User user) throws DuplicateInstanceException;
 
-    User updateProfile(Long id, String firstName, String lastName, String email, LocalDate birthDate, String password) throws DuplicateInstanceException, InstanceNotFoundException;
+    User updateProfile(Long id, String firstName, String lastName, String email, LocalDate birthDate, String password,
+           List<String> favorites) throws DuplicateInstanceException, InstanceNotFoundException;
+
+    Optional<User> findById(Long id);
 
 }

@@ -10,6 +10,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class UserDto {
     public interface AllValidations {}
@@ -22,10 +23,12 @@ public class UserDto {
     private String email;
     private LocalDate birthDate;
     private String password;
+    private List<String> favorites;
 
     public UserDto() {}
 
-    public UserDto(Long id, String firstName, String lastName, String email, LocalDate birthDate, String password) {
+    public UserDto(Long id, String firstName, String lastName, String email, LocalDate birthDate, String password,
+       List<String> favorites) {
 
         this.id = id;
         this.firstName = firstName.trim();
@@ -33,6 +36,7 @@ public class UserDto {
         this.email = email.trim();
         this.birthDate = birthDate;
         this.password = password;
+        this.favorites = favorites;
 
     }
 
@@ -93,4 +97,16 @@ public class UserDto {
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
+
+    @NotNull(groups={UserDto.AllValidations.class, UserDto.UpdateValidations.class})
+    public List<String> getFavorites() {
+        return favorites;
+    }
+
+    public void setUrls(List<String> favorites) {
+        this.favorites = favorites;
+    }
+
+
+
 }

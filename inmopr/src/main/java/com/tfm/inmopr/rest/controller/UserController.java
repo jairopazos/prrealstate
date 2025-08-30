@@ -16,6 +16,7 @@ import com.tfm.inmopr.rest.common.JwtGenerator;
 import com.tfm.inmopr.rest.common.JwtInfo;
 import com.tfm.inmopr.rest.dtos.AuthenticatedUserDto;
 import com.tfm.inmopr.rest.dtos.LoginParamsDto;
+import com.tfm.inmopr.rest.dtos.PostDto;
 import com.tfm.inmopr.rest.dtos.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.Locale;
+import java.util.Map;
 
 import static com.tfm.inmopr.rest.dtos.UserConversor.*;
 
@@ -108,9 +110,10 @@ public class UserController {
         }
 
         return toUserDto(userService.updateProfile(id, userDto.getFirstName(), userDto.getLastName(),
-                userDto.getEmail(), userDto.getBirthDate(), userDto.getPassword()));
+                userDto.getEmail(), userDto.getBirthDate(), userDto.getPassword(), userDto.getFavorites()));
 
     }
+
 
     private String generateServiceToken(User user) {
 

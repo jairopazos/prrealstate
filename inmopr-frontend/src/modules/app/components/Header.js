@@ -10,6 +10,7 @@ import users from '../../users';
 import {useSelector} from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import {getUserId} from "../../users/selectors";
+import { Link } from "react-router-dom";
 
 
 const Header = () => {
@@ -49,6 +50,7 @@ const Header = () => {
                         {userName && (
                             <div className="dropdown-content-header">
                                 <a href={`/listings/user/${userId}`}>Ver mis anuncios publicados</a>
+                                <a href={`/listings/user/${userId}?favorites=true`}>Ver mis favoritos ⭐</a>
                                 <a href="/users/logout">Cerrar sesión</a>
                             </div>
                         )}
@@ -76,6 +78,9 @@ const Header = () => {
                                 <a href={`/listings/user/${userId}`}>
                                     Ver mis anuncios publicados
                                 </a>
+                            </li>
+                            <li>
+                                <Link to={`/listings/favorites?userId=${userId}`}>Ver mis favoritos ⭐</Link>
                             </li>
                             <li>
                                 <a href="/users/details">

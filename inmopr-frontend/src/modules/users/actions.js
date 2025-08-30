@@ -52,8 +52,9 @@ export const updateProfileCompleted = user => ({
 
 export const updateProfile = (user, onSuccess, onErrors) => dispatch =>
     backend.userService.updateProfile(user,
-        user => {
-            dispatch(updateProfileCompleted(user));
-            onSuccess();
+        updatedUser => {   // ✅ viene del backend con favoritos actualizados
+            dispatch(updateProfileCompleted(updatedUser));
+            if (onSuccess) onSuccess(updatedUser);  // ✅ lo propagas también al callback
         },
-        onErrors);
+        onErrors
+    );

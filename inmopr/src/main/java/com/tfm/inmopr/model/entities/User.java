@@ -5,12 +5,11 @@
 
 package com.tfm.inmopr.model.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.tfm.inmopr.model.converters.ListToStringConverter;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class User {
@@ -21,16 +20,18 @@ public class User {
     private String password;
     private String email;
     private LocalDate birthDate;
+    private List<String> favorites;
 
     public User() {}
 
-    public User(String firstName, String lastName, String email, String password, LocalDate birthDate) {
+    public User(String firstName, String lastName, String email, String password, LocalDate birthDate, List<String> favorites) {
 
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.birthDate = birthDate;
+        this.favorites = favorites;
 
     }
 
@@ -82,6 +83,16 @@ public class User {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    @Convert(converter = ListToStringConverter.class)
+    @Column(columnDefinition = "TEXT", nullable = false)
+    public List<String> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<String> favorites) {
+        this.favorites = favorites;
     }
 
 }

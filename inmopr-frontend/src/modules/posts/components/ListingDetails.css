@@ -412,3 +412,42 @@ h1, h2, h3, h4, h5, h6 {
     box-sizing: border-box;
     resize: vertical; /* Permite al usuario redimensionar el campo verticalmente */
 }
+
+.favorite-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    margin-top: 30px;
+    margin-left: 10px;
+    font-family: 'Cormorant Garamond', serif; /* igual que el resto */
+    font-size: 1.1rem; /* tamaño del texto */
+    font-weight: bold;
+    color: #444;
+    transition: transform 0.2s ease;
+}
+
+.favorite-button:hover {
+    transform: scale(1.05);
+}
+
+/* ✅ Corazón único y controlado */
+.favorite-button .heart {
+    font-size: 28px;          /* tamaño del corazón */
+    line-height: 1;
+    color: #bbb;              /* gris inicial */
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.favorite-button .heart.active {
+    color: #e63946;           /* rojo cuando está marcado */
+}
+
+.favorite-button .favorite-text {
+    font-size: 1.3rem;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    color: inherit;
+}

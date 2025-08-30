@@ -11,6 +11,8 @@ import com.tfm.inmopr.rest.dtos.PostDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface PostsService {
     void publishPost(Long userId, PostDto post);
 
@@ -23,4 +25,6 @@ public interface PostsService {
     Page<Post> findByUserId(String userId, Pageable pageable);
 
     void sendEmail(String to, String from, String subject, String body);
+
+    Page<Post> findByIdIn(List<Long> ids, Pageable pageable);
 }

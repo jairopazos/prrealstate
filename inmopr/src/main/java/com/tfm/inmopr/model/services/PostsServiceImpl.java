@@ -22,6 +22,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static com.tfm.inmopr.rest.dtos.PostConversor.toPost;
@@ -145,4 +146,11 @@ public class PostsServiceImpl implements PostsService{
             throw new RuntimeException("Error al enviar correo HTML", e);
         }
      }
+
+    @Override
+    public Page<Post> findByIdIn(List<Long> ids, Pageable pageable) {
+        return postDao.findByIdIn(ids, pageable);
+    }
+
+
 }
