@@ -5,7 +5,7 @@
 
 export default {
 
-    'project.app.H1.title': 'P·R Real State',
+    'project.app.H1.title': 'InmoPR',
 
     // Mensaxes de error
     'project.common.ErrorDialog.title': 'Error',

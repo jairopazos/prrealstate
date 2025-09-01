@@ -101,10 +101,6 @@ const Upload3DTour = ({ onUploadComplete }) => {
                 <div className="publish-card">
                     <div>
 
-                        <h2 className="publish-title">
-                            <FormattedMessage id="project.publish.post.upload.price"/>
-                        </h2>
-
                         <Errors errors={backendErrors} onClose={() => setBackendErrors(null)} />
 
                         <form ref={formRef} onSubmit={handleSubmit}>
@@ -126,7 +122,7 @@ const Upload3DTour = ({ onUploadComplete }) => {
                                 <FormattedMessage id="project.publish.post.upload.images.text"/>
                                 <br></br>
                                 <br></br>
-                                <input type="file" accept="image/*" multiple onChange={handleFileChange} required />
+                                <input type="file" accept="image/*" multiple onChange={handleFileChange} />
                             </div>
 
                             {loading && <p><FormattedMessage id="project.publish.post.upload.images.uploading" /></p>}

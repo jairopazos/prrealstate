@@ -28,10 +28,12 @@ const ListingDetails = () => {
     const user = useSelector(users.selectors.getUser);
     const userName = useSelector(users.selectors.getFirstName);
     const userEmail = useSelector(users.selectors.getEmail);
+    const userId = useSelector(users.selectors.getUserId);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const intl = useIntl();
     const [isFavorite, setIsFavorite] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
         if (user?.favorites) {
@@ -165,6 +167,49 @@ const ListingDetails = () => {
         setIsEditing(false);
     };
 
+    const handleDelete = async () => {
+        if (!canEdit) return;
+        const ok = window.confirm("¿Seguro que quieres eliminar este anuncio? Esta acción no se puede deshacer.");
+        if (!ok) return;
+
+        try {
+            setIsDeleting(true);
+
+            // Si tienes un action creator en Redux:
+            if (typeof actions.deletePost === "function") {
+                dispatch(
+                    actions.deletePost(
+                        id,
+                        userId,
+                        () => {
+                            setIsDeleting(false);
+                            alert("Anuncio eliminado con éxito");
+                            navigate("/");
+                        },
+                        (err) => {
+                            setIsDeleting(false);
+                            console.error("Error al eliminar:", err);
+                            alert(`Error al eliminar: ${err?.message || "Inténtalo de nuevo"}`);
+                        }
+                    )
+                );
+
+                return;
+            }
+
+            // Fallback directo a la API si no existe actions.deletePost
+            const res = await fetch(`/listings/${id}`, { method: "DELETE" });
+            if (!res.ok) throw new Error("No se pudo eliminar el anuncio");
+            setIsDeleting(false);
+            alert("Anuncio eliminado con éxito");
+            navigate("/"); // ajusta la ruta de destino
+        } catch (e) {
+            setIsDeleting(false);
+            console.error("Error al eliminar:", e);
+            alert(`Error al eliminar: ${e?.message || "Inténtalo de nuevo"}`);
+        }
+    };
+
     const htmlMessage = `
     <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
         <h2>Alguien está interesado en tu anuncio:</h2>
@@ -172,7 +217,7 @@ const ListingDetails = () => {
             <img src="${property.urls[0]}" alt="Foto del anuncio" style="width: 100%; max-height: 300px; object-fit: cover; border-radius: 8px;" />
             <h3 style="color: #2980b9;">${property.name}</h3>
         </a>
-        <p><strong>Mensaje del usuario:</strong></p>
+        <p><strong>Mensaje del usuario ${userName} (${userEmail})</strong></p>
         <blockquote style="border-left: 4px solid #ccc; padding-left: 15px; margin: 10px 0;">
             ${message.replace(/\n/g, "<br>")}
         </blockquote>
@@ -439,9 +484,30 @@ const ListingDetails = () => {
                     {canEdit && (
                         <div className="edit-button-container">
                             {!isEditing ? (
-                                <button className="edit-button" onClick={() => setIsEditing(true)}>
-                                    <FormattedMessage id="listing.details.edit" defaultMessage="Editar Anuncio" />
-                                </button>
+                                <>
+                                    <button className="edit-button" onClick={() => setIsEditing(true)}>
+                                        <FormattedMessage id="listing.details.edit" defaultMessage="Editar Anuncio" />
+                                    </button>
+
+                                    <button
+                                        className="delete-button"
+                                        onClick={handleDelete}
+                                        disabled={isDeleting}
+                                        style={{
+                                            marginLeft: 8,
+                                            backgroundColor: '#c62828',
+                                            color: 'white',
+                                            border: 'none',
+                                            padding: '8px 12px',
+                                            borderRadius: 6,
+                                            cursor: isDeleting ? 'not-allowed' : 'pointer'
+                                        }}
+                                    >
+                                        {isDeleting
+                                            ? "Borrando..."
+                                            : <FormattedMessage id="listing.details.delete" defaultMessage="Borrar anuncio" />}
+                                    </button>
+                                </>
                             ) : (
                                 <>
                                     <button className="save-button" onClick={handleSave}>
@@ -454,6 +520,7 @@ const ListingDetails = () => {
                             )}
                         </div>
                     )}
+
                 </div>
 
                 <div className="right-panel">
@@ -527,9 +594,13 @@ const ListingDetails = () => {
                                 {isFavorite ? "Anuncio favorito" : "Marcar como favorito"}
                             </span>
                         </button>
-
-
                     )}
+                    <button
+                        onClick={() => navigate(`/user/${property.userId}/reviews`)}
+                        className="favorite-button"
+                    >
+                        Ver reseñas del anunciante
+                    </button>
                 </div>
             </div>
         </div>

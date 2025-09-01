@@ -50,7 +50,7 @@ const Header = () => {
                         {userName && (
                             <div className="dropdown-content-header">
                                 <a href={`/listings/user/${userId}`}>Ver mis anuncios publicados</a>
-                                <a href={`/listings/user/${userId}?favorites=true`}>Ver mis favoritos ⭐</a>
+                                <a href={`/listings/user/${userId}?favorites=true`}>Ver mis favoritos</a>
                                 <a href="/users/logout">Cerrar sesión</a>
                             </div>
                         )}
@@ -80,7 +80,7 @@ const Header = () => {
                                 </a>
                             </li>
                             <li>
-                                <Link to={`/listings/favorites?userId=${userId}`}>Ver mis favoritos ⭐</Link>
+                                <Link to={`/listings/favorites?userId=${userId}`}>Ver mis favoritos</Link>
                             </li>
                             <li>
                                 <a href="/users/details">

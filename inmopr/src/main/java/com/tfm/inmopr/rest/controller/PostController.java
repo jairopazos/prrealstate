@@ -202,4 +202,26 @@ public class PostController {
         }
     }
 
+    @PostMapping("/{id}/delete")
+    public ResponseEntity<Map<String, Object>> deletePost(
+            @PathVariable Long id,
+            @RequestParam("userId") Long userId // <-- en query param, no request attribute
+    ) {
+        Post post = postDao.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Anuncio no encontrado"));
+
+        Long ownerId = post.getUserId(); // o post.getUser().getId() según tu modelo
+        boolean isAdmin = false; // pon aquí tu lógica real si tienes roles
+
+        if (!Objects.equals(ownerId, userId) && !isAdmin) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permiso para borrar este anuncio");
+        }
+
+        postsService.deletePost(id);
+        return ResponseEntity.ok(Map.of("deleted", true, "id", id));
+    }
+
+
+
+
 }

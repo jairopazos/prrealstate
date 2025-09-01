@@ -15,11 +15,13 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -150,6 +152,15 @@ public class PostsServiceImpl implements PostsService{
     @Override
     public Page<Post> findByIdIn(List<Long> ids, Pageable pageable) {
         return postDao.findByIdIn(ids, pageable);
+    }
+
+    @Override
+    public void deletePost(Long id) {
+        // Si quieres validar existencia antes:
+        if (!postDao.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Anuncio no encontrado");
+        }
+        postDao.deleteById(id);
     }
 
 

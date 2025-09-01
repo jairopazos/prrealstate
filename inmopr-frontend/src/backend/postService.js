@@ -37,3 +37,8 @@ export const sendEmail = (emailDto, onSuccess, onErrors) => {
         onErrors(error);
     });
 };
+
+export const deletePost = (id, userId, onSuccess, onErrors) =>
+    appFetch(`/listings/${id}/delete?userId=${encodeURIComponent(userId)}`,
+        config('POST'),
+        onSuccess, onErrors);

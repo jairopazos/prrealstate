@@ -17,6 +17,16 @@ const signUpCompleted = authenticatedUser => ({
     authenticatedUser
 });
 
+const fetchUserReviewsCompleted = (advertiserId, reviews) => ({
+    type: "REVIEWS/SET",
+    payload: { advertiserId, reviews },
+});
+
+const createUserReviewCompleted = (advertiserId, review) => ({
+    type: "REVIEWS/ADD",
+    payload: { advertiserId, review },
+});
+
 export const login = (email, password, onSuccess, onErrors, reauthenticationCallback) => dispatch =>
     backend.userService.login(email, password,
         authenticatedUser => {
@@ -55,6 +65,28 @@ export const updateProfile = (user, onSuccess, onErrors) => dispatch =>
         updatedUser => {   // ✅ viene del backend con favoritos actualizados
             dispatch(updateProfileCompleted(updatedUser));
             if (onSuccess) onSuccess(updatedUser);  // ✅ lo propagas también al callback
+        },
+        onErrors
+    );
+
+export const fetchUserReviews = (advertiserId, onSuccess, onErrors) => (dispatch) =>
+    backend.userService.getUserReviews(
+        advertiserId,
+        (data) => {
+            dispatch(fetchUserReviewsCompleted(advertiserId, data));
+            if (onSuccess) onSuccess(data);
+        },
+        onErrors
+    );
+
+// POST /users/:id/reviews
+export const createUserReview = (advertiserId, { rating, comment }, onSuccess, onErrors) => (dispatch) =>
+    backend.userService.createUserReview(
+        advertiserId,
+        { rating, comment },
+        (saved) => {
+            dispatch(createUserReviewCompleted(advertiserId, saved));
+            if (onSuccess) onSuccess(saved);
         },
         onErrors
     );

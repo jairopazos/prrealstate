@@ -420,10 +420,10 @@ h1, h2, h3, h4, h5, h6 {
     border: none;
     background: none;
     cursor: pointer;
-    margin-top: 30px;
-    margin-left: 10px;
+    margin-top: 10%;
+    margin-left: 15%;
     font-family: 'Cormorant Garamond', serif; /* igual que el resto */
-    font-size: 1.1rem; /* tamaño del texto */
+    font-size: 1.3rem; /* tamaño del texto */
     font-weight: bold;
     color: #444;
     transition: transform 0.2s ease;

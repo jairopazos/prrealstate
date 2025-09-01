@@ -19,3 +19,5 @@ export const updatePost = (postDto, id, onSuccess, onErrors) => dispatch =>
 export const sendEmail = (emailDto, onSuccess, onErrors) => dispatch =>
     backend.postService.sendEmail(emailDto, onSuccess, onErrors);
 
+export const deletePost = (id, userId, onSuccess, onErrors) => dispatch =>
+    backend.postService.deletePost(id, userId, onSuccess, onErrors);

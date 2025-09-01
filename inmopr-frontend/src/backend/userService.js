@@ -29,3 +29,11 @@ export const signUp = (user, onSuccess, onErrors, reauthenticationCallback) => {
 export const updateProfile = (user, onSuccess, onErrors) =>
     appFetch(`/users/${user.id}`, config('PUT', user),
         onSuccess, onErrors);
+
+export const getUserReviews = (advertiserId, onSuccess, onErrors) =>
+    appFetch(`/users/${advertiserId}/reviews`, config('GET'),
+        onSuccess, onErrors);
+
+export const createUserReview = (advertiserId, body, onSuccess, onErrors) =>
+    appFetch(`/users/${advertiserId}/reviews`, config('POST', body),
+        onSuccess, onErrors);

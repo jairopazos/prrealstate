@@ -62,6 +62,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/listings/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/listings**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/listings/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,  "/users/*/reviews").permitAll()
+                        .requestMatchers(HttpMethod.POST,  "/users/*/reviews").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/listings/**/delete").permitAll()
                         .anyRequest().denyAll()
                 );
 

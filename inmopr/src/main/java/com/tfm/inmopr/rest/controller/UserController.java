@@ -5,19 +5,18 @@
 
 package com.tfm.inmopr.rest.controller;
 
+import com.tfm.inmopr.model.entities.Review;
 import com.tfm.inmopr.model.entities.User;
 import com.tfm.inmopr.model.exceptions.DuplicateInstanceException;
 import com.tfm.inmopr.model.exceptions.IncorrectLoginException;
 import com.tfm.inmopr.model.exceptions.InstanceNotFoundException;
 import com.tfm.inmopr.model.exceptions.PermissionException;
+import com.tfm.inmopr.model.services.ReviewService;
 import com.tfm.inmopr.model.services.UserService;
 import com.tfm.inmopr.rest.common.ErrorsDto;
 import com.tfm.inmopr.rest.common.JwtGenerator;
 import com.tfm.inmopr.rest.common.JwtInfo;
-import com.tfm.inmopr.rest.dtos.AuthenticatedUserDto;
-import com.tfm.inmopr.rest.dtos.LoginParamsDto;
-import com.tfm.inmopr.rest.dtos.PostDto;
-import com.tfm.inmopr.rest.dtos.UserDto;
+import com.tfm.inmopr.rest.dtos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -27,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -44,6 +44,9 @@ public class UserController {
     private UserService userService;
 
     @Autowired
+    private ReviewService reviewService;
+
+    @Autowired
     private JwtGenerator jwtGenerator;
 
     @Autowired
@@ -59,6 +62,20 @@ public class UserController {
 
         return new ErrorsDto(errorMessage);
 
+    }
+
+    @ExceptionHandler(PermissionException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    public ErrorsDto handlePermissionException(PermissionException ex, Locale locale) {
+        // Si tienes i18n: messages.properties => project.exceptions.SelfReviewNotAllowed=No puedes reseñar tu propio anuncio.
+        String msg = messageSource.getMessage(
+                "project.exceptions.SelfReviewNotAllowed",
+                null,
+                "No puedes reseñar tu propio anuncio.", // fallback
+                locale
+        );
+        return new ErrorsDto(msg);
     }
 
     @ExceptionHandler(DuplicateInstanceException.class)
@@ -112,6 +129,30 @@ public class UserController {
         return toUserDto(userService.updateProfile(id, userDto.getFirstName(), userDto.getLastName(),
                 userDto.getEmail(), userDto.getBirthDate(), userDto.getPassword(), userDto.getFavorites()));
 
+    }
+
+    @GetMapping("/{id}/reviews")
+    public List<ReviewDto> getReviewsByAdvertiser(@PathVariable Long id) throws InstanceNotFoundException {
+        List<Review> reviews = reviewService.findByAdvertiserId(id);
+        return reviews.stream().map(ReviewConversor::toReviewDto).toList();
+    }
+
+    @PostMapping("/{id}/reviews")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ReviewDto createReview(
+            @RequestAttribute Long userId,
+            @PathVariable Long id,
+            @Validated @RequestBody CreateReviewDto dto)
+            throws InstanceNotFoundException, PermissionException, DuplicateInstanceException {
+
+        if (userId.equals(id)) {
+            throw new PermissionException();
+        }
+
+        Review created = reviewService.createReview(id, userId, dto.getRating(), dto.getComment());
+
+
+        return ReviewConversor.toReviewDto(created);
     }
 
 

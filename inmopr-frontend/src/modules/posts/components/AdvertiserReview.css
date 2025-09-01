@@ -1,0 +1,162 @@
+/* ===== Base: móvil / ventanas pequeñas (1 columna) ===== */
+.reviews-container {
+    display: grid;
+    grid-template-columns: 1fr;      /* 1 columna por defecto */
+    row-gap: 16px;
+    column-gap: 0;
+    max-width: 1200px;
+    width: 100%;
+    margin: 110px auto 0;
+    padding: 16px 20px;
+    align-items: start;
+    padding-inline: clamp(12px, 3vw, 40px); /* margen lateral fluido */
+}
+
+/* Título + mensaje "no hay reseñas" ocupan el ancho */
+.reviews-container > h2,
+.reviews-container .no-reviews,
+.reviews-container > p:first-of-type,
+.review-list,
+.review-form {
+    grid-column: 1 / -1;
+}
+
+.reviews-container > h2 {
+    margin: 0 0 6px 0;
+    padding-left: 8px;
+}
+
+.reviews-container .no-reviews,
+.reviews-container > p:first-of-type {
+    margin: 0;
+    padding-left: 8px;
+}
+
+/* Lista en móvil */
+.review-list {
+    margin-left: 0;
+    padding-left: 8px;
+}
+
+/* Formulario en móvil (sin barra) */
+.review-form {
+    margin-top: 8px;
+    border-left: 0 !important;
+    padding-left: 0;
+    position: relative;
+    min-width: 0; /* evita overflow en grids */
+}
+.review-form::before { display: none; }
+
+/* Botón + textarea + estrellas (igual que antes) */
+.review-button {
+    margin-top: 12px;
+    background-color: #bfa980;
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color .3s ease, box-shadow .2s ease;
+    font-weight: 600;
+    /* 🔽 ancho fluido y más estrecho en pantallas pequeñas */
+    width: clamp(360px, 72vw, 680px);
+    max-width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.review-button:hover {
+    background-color: #a8916e;
+    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+}
+
+.property-opinion { margin-left: 30px; font-size: 18px; }
+
+/* Textarea */
+.property-opinion-edit {
+    /* 🔽 ancho fluido y restringido en pantallas pequeñas */
+    width: clamp(360px, 72vw, 680px);
+    max-width: 100%;
+    display: block;
+    margin: 10px auto 0;               /* centra con el mismo ancho que el botón */
+
+    min-height: clamp(110px, 22vh, 200px);
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    resize: vertical;
+    transition: border-color .3s ease;
+}
+.property-opinion-edit:focus { outline: none; border-color: #bfa980; }
+
+/* Estrellas */
+.stars { display: inline-flex; gap: 6px; }
+.star {
+    font-size: 28px;
+    line-height: 1;
+    background: transparent;
+    border: none;
+    padding: 2px;
+    color: #cfcfcf;
+    cursor: pointer;
+    transition: transform .12s ease, color .12s ease, filter .12s ease;
+}
+.star.ro { cursor: default; }
+.star:hover:not(.ro), .star.active { color: #d4af37; filter: drop-shadow(0 1px 2px rgba(181,140,52,.35)); }
+.star:active:not(.ro) { transform: scale(.96); }
+.star:focus-visible { outline: 2px solid rgba(212,175,55,.55); outline-offset: 2px; border-radius: 4px; }
+
+/* ===== Desktop: dos columnas al 50% (desde 1100px) ===== */
+@media (min-width: 1100px) {
+    .reviews-container {
+        grid-template-columns: 1fr 1fr;  /* 50/50 */
+        column-gap: 48px;
+        padding: 24px 40px;
+        margin-top: 130px;
+    }
+
+    .reviews-container > h2,
+    .reviews-container .no-reviews,
+    .reviews-container > p:first-of-type,
+    .review-list {
+        grid-column: 1 / 2;              /* izquierda */
+    }
+
+    .review-list { padding-left: 46px; }
+
+    .review-form {
+        grid-column: 2 / 3;              /* derecha */
+        padding-left: 24px;
+        border-left: none !important;     /* nos encargamos con la pseudo-línea */
+        position: relative;
+        margin-top: -70px;
+    }
+    .review-form::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: -24px;                      /* mitad del gap */
+        width: 1px;
+        background: #ddd;
+        display: block;
+    }
+
+    /* En desktop el textarea y el botón ocupan toda la columna */
+    .property-opinion-edit,
+    .review-button {
+        width: 100%;
+        max-width: none;
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+/* Separador <hr/> no se usa */
+.reviews-container > hr { display: none; }
+
+.review-list { display: flex; flex-direction: column; gap: 40px !important; }

@@ -329,7 +329,7 @@ const ListingsPage = () => {
                     Mapa 🗺️
                 </button>
 
-                <button className="filter-field-button" onClick={() => loadListings(0)}>
+                <button className="filter-field-button" onClick={() => loadListings(0, city)}>
                     Buscar
                 </button>
             </div>

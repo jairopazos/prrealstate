@@ -27,4 +27,7 @@ public interface PostsService {
     void sendEmail(String to, String from, String subject, String body);
 
     Page<Post> findByIdIn(List<Long> ids, Pageable pageable);
+
+    void deletePost(Long id);
+
 }

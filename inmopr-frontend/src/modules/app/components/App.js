@@ -20,6 +20,7 @@ import ListingsMap from "../../posts/components/ListingsMap";
 import ListingDetails from "../../posts/components/ListingDetails";
 import Upload3DTour from "../../posts/components/Upload3DTour";
 import Logout from "../../users/components/Logout";
+import AdvertiserReviews from "../../posts/components/AdvertiserReview";
 
 
 const AppContent = () => {
@@ -45,7 +46,7 @@ const AppContent = () => {
                 <Route path="listings/new/uploadContactInformation" element={<UploadContactInformation />} />
                 <Route path="listings/map" element={<ListingsMap />} />
                 <Route path="listing/details/:id" element={<ListingDetails />} />
-
+                <Route path="user/:userId/reviews" element={<AdvertiserReviews />} />
             </Routes>
         </div>
     );
